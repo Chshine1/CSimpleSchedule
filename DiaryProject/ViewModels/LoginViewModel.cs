@@ -68,6 +68,7 @@ public class LoginViewModel : NavigationModel
     private async void RegisterTimers(IMemoLocalRepository memoRepository, TimerService timerService, IMapper mapper)
     {
         var query = (await memoRepository.GetAllAsync()).Result;
+        if (query == null) return;
         var waitList = (from memo in query select mapper.Map<MemoRecord>(memo)).ToArray();
         if (waitList.Length == 0) return;
         

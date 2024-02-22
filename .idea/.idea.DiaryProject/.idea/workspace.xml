@@ -10,12 +10,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c4b3c6d3-5dce-44e4-a281-11a42dac8dfe" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.DiaryProject/.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.DiaryProject/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.DiaryProject/.idea/sqldialects.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.DiaryProject/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DiaryProject.sln" beforeDir="false" afterPath="$PROJECT_DIR$/CSimpleSchedule.sln" afterDir="false" />
+    <list default="true" id="c4b3c6d3-5dce-44e4-a281-11a42dac8dfe" name="Changes" comment="feat:程序主体">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DiaryProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DiaryProject/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -282,23 +278,7 @@
       <workItem from="1708568139893" duration="9791000" />
       <workItem from="1708580900411" duration="1332000" />
       <workItem from="1708582278019" duration="753000" />
-      <workItem from="1708583113568" duration="1475000" />
-    </task>
-    <task id="LOCAL-00019" summary="feat:Use AutoMapper on memo records instead of manual convert">
-      <option name="closed" value="true" />
-      <created>1707545228666</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1707545228666</updated>
-    </task>
-    <task id="LOCAL-00020" summary="feat:Add memo in the editor">
-      <option name="closed" value="true" />
-      <created>1707571605372</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1707571605372</updated>
+      <workItem from="1708583113568" duration="2437000" />
     </task>
     <task id="LOCAL-00021" summary="feat:Add memo in the editor">
       <option name="closed" value="true" />
@@ -676,7 +656,23 @@
       <option name="project" value="LOCAL" />
       <updated>1708610355628</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="feat:程序主体">
+      <option name="closed" value="true" />
+      <created>1708610574177</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1708610574177</updated>
+    </task>
+    <task id="LOCAL-00069" summary="feat:程序主体">
+      <option name="closed" value="true" />
+      <created>1708610797117</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1708610797117</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
