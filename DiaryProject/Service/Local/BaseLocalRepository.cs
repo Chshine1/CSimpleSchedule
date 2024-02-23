@@ -13,7 +13,6 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
 
     protected BaseLocalRepository(string dbPath)
     {
-        Console.WriteLine(dbPath);
         if (!Directory.Exists(dbPath)) Directory.CreateDirectory(dbPath);
         dbPath += "\\save.db";
         _connection = new SQLiteAsyncConnection(dbPath);

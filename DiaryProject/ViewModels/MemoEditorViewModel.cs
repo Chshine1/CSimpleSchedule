@@ -41,6 +41,8 @@ public class MemoEditorViewModel : NavigationModel
 
     public DelegateCommand<EditableMemoModel> ContentUpdateCommand { get; set; }
     public DelegateCommand<EditableMemoModel> AddMemoCommand { get; set; }
+
+    public DelegateCommand<EditableMemoModel> DeleteSpecific { get; set; }
     public DelegateCommand AddFirstMemoCommand { get; set; }
     public DelegateCommand<RichTextBox> ConfirmContentInput { get; set; }
 
@@ -82,6 +84,12 @@ public class MemoEditorViewModel : NavigationModel
             _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
             if (App.IsUserRegistered) _memoService.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
 #endif
+        });
+        DeleteSpecific = new DelegateCommand<EditableMemoModel>(e =>
+        {
+            _memoRepository.DeleteAsync(e.Memo.Id);
+            if (App.IsUserRegistered) _memoService.DeleteAsync(e.Memo.Id);
+            MemoModels.Remove(e);
         });
     }
     

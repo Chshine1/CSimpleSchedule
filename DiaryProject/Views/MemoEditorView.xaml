@@ -123,186 +123,239 @@
                 <ItemsControl ItemsSource="{Binding MemoModels}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel>
-                                <Border HorizontalAlignment="Center"
-                                        Width="900" MaxHeight="300" CornerRadius="4" Margin="0,20"
-                                        Background="{Binding BackgroundColor}"
-                                        BorderThickness="2" BorderBrush="{Binding HeaderColor}"
-                                        x:Name="MemoPresenter">
-                                    <Border.Effect>
-                                        <DropShadowEffect Opacity="0.3" />
-                                    </Border.Effect>
-                                    <DockPanel LastChildFill="True">
-                                        <DockPanel DockPanel.Dock="Top" MaxHeight="300">
-                                            <!--<ProgressBar DockPanel.Dock="Top" Height="4" IsIndeterminate="True"
-                                                         BorderThickness="0" Background="Transparent"
-                                                         Foreground="{StaticResource Blue2}"
-                                                         Visibility="{Binding IsProgressBarActive}"/>-->
-                                            <Expander DockPanel.Dock="Bottom" Style="{StaticResource MemoEditorExpander}"
-                                                      Background="{Binding BackgroundColor}">
-                                                <StackPanel Height="210" Width="900">
-                                                    <local:RichTextBoxHelper x:Name="ContentBox" Height="150"
-                                                                             Width="850" Margin="0,25,0,10"
-                                                                             Document="{Binding ContentDocument}">
-                                                    </local:RichTextBoxHelper>
-                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
-                                                                Margin="20,0">
-                                                        <Button Width="80" Height="20" Margin="10,0"
-                                                                Command="{Binding ElementName=This, Path=DataContext.ConfirmContentInput}"
-                                                                CommandParameter="{Binding ElementName=ContentBox}">
-                                                            <TextBlock Text="Confirm" />
-                                                        </Button>
-                                                        <Button Width="80" Height="20" Margin="10,0"
-                                                                HorizontalAlignment="Right">
-                                                            <TextBlock Text="Cancel" />
-                                                        </Button>
+                            <StackPanel Margin="10,0">
+                                <DockPanel HorizontalAlignment="Center">
+                                    <Border HorizontalAlignment="Left" DockPanel.Dock="Left"
+                                            Width="850" MaxHeight="300" CornerRadius="4" Margin="0,20"
+                                            Background="{Binding BackgroundColor}"
+                                            BorderThickness="2" BorderBrush="{Binding HeaderColor}"
+                                            x:Name="MemoPresenter">
+                                        <Border.Effect>
+                                            <DropShadowEffect Opacity="0.3" />
+                                        </Border.Effect>
+                                        <DockPanel LastChildFill="True">
+                                            <DockPanel DockPanel.Dock="Top" MaxHeight="300">
+                                                <Expander DockPanel.Dock="Bottom"
+                                                          Style="{StaticResource MemoEditorExpander}"
+                                                          Background="{Binding BackgroundColor}">
+                                                    <StackPanel Height="210" Width="850">
+                                                        <local:RichTextBoxHelper x:Name="ContentBox" Height="170"
+                                                            Width="800" Margin="0,25,0,10"
+                                                            Document="{Binding ContentDocument}">
+                                                        </local:RichTextBoxHelper>
+                                                        <!--<StackPanel Orientation="Horizontal"
+                                                                    HorizontalAlignment="Right"
+                                                                    Margin="20,0">
+                                                            <Button Width="80" Height="20" Margin="10,0"
+                                                                    Command="{Binding ElementName=This, Path=DataContext.ConfirmContentInput}"
+                                                                    CommandParameter="{Binding ElementName=ContentBox}">
+                                                                <TextBlock Text="Confirm" />
+                                                            </Button>
+                                                            <Button Width="80" Height="20" Margin="10,0"
+                                                                    HorizontalAlignment="Right">
+                                                                <TextBlock Text="Cancel" />
+                                                            </Button>
+                                                        </StackPanel>-->
+                                                    </StackPanel>
+                                                </Expander>
+                                                <StackPanel DockPanel.Dock="Left" Margin="10,4"
+                                                            Orientation="Horizontal"
+                                                            VerticalAlignment="Center">
+                                                    <ToggleButton Margin="0,2,14,0"
+                                                                  Style="{StaticResource MemoEditorToggle}"
+                                                                  Foreground="{Binding HeaderColor}"
+                                                                  Background="{StaticResource Blue4}"
+                                                                  HorizontalAlignment="Center" VerticalAlignment="Top"
+                                                                  IsChecked="{Binding Memo.Active, Mode=TwoWay}"
+                                                                  ToolTip="打开/关闭提醒"
+                                                                  ToolTipService.InitialShowDelay="500">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="Checked">
+                                                                <i:InvokeCommandAction
+                                                                    Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
+                                                                    CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
+                                                            </i:EventTrigger>
+                                                            <i:EventTrigger EventName="Unchecked">
+                                                                <i:InvokeCommandAction
+                                                                    Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
+                                                                    CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </ToggleButton>
+                                                    <StackPanel>
+                                                        <TextBox BorderThickness="0" Background="Transparent"
+                                                                 MinWidth="20"
+                                                                 VerticalAlignment="Center"
+                                                                 Text="{Binding Memo.Title, Mode=TwoWay}"
+                                                                 VerticalContentAlignment="Center" FontSize="20"
+                                                                 PreviewKeyDown="EndTextBoxInput" Focusable="True">
+                                                            <i:Interaction.Triggers>
+                                                                <i:EventTrigger EventName="LostFocus">
+                                                                    <i:InvokeCommandAction
+                                                                        Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
+                                                                        CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
+                                                                </i:EventTrigger>
+                                                            </i:Interaction.Triggers>
+                                                        </TextBox>
+                                                        <TextBlock Height="12" Width="100" Background="Transparent"
+                                                                   Margin="3,1"
+                                                                   Text="{Binding CategoryDisplay}" FontStyle="Italic"
+                                                                   FontSize="10"
+                                                                   HorizontalAlignment="Left" />
+                                                        <TextBlock Height="12" Width="100" Background="Transparent"
+                                                                   Margin="3,1"
+                                                                   Text="{Binding StatusText}" FontStyle="Italic"
+                                                                   FontSize="10"
+                                                                   HorizontalAlignment="Left" />
                                                     </StackPanel>
                                                 </StackPanel>
-                                            </Expander>
-                                            <StackPanel DockPanel.Dock="Left" Margin="10,4" Orientation="Horizontal"
-                                                        VerticalAlignment="Center">
-                                                <ToggleButton Margin="0,2,14,0"
-                                                              Style="{StaticResource MemoEditorToggle}"
-                                                              Foreground="{Binding HeaderColor}"
-                                                              Background="{StaticResource Blue4}"
-                                                              HorizontalAlignment="Center" VerticalAlignment="Top"
-                                                              IsChecked="{Binding Memo.Active, Mode=TwoWay}"
-                                                              ToolTip="打开/关闭提醒" ToolTipService.InitialShowDelay="500">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="Checked">
-                                                            <i:InvokeCommandAction
-                                                                Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
-                                                                CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="Unchecked">
-                                                            <i:InvokeCommandAction
-                                                                Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
-                                                                CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                </ToggleButton>
-                                                <StackPanel>
-                                                    <TextBox BorderThickness="0" Background="Transparent" MinWidth="20"
-                                                             VerticalAlignment="Center"
-                                                             Text="{Binding Memo.Title, Mode=TwoWay}"
-                                                             VerticalContentAlignment="Center" FontSize="20"
-                                                             PreviewKeyDown="EndTextBoxInput" Focusable="True">
-                                                        <i:Interaction.Triggers>
-                                                            <i:EventTrigger EventName="LostFocus">
-                                                                <i:InvokeCommandAction
-                                                                    Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
-                                                                    CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
-                                                            </i:EventTrigger>
-                                                        </i:Interaction.Triggers>
-                                                    </TextBox>
-                                                    <TextBlock Height="12" Width="100" Background="Transparent" Margin="3,1"
-                                                               Text="{Binding CategoryDisplay}" FontStyle="Italic" FontSize="10"
-                                                               HorizontalAlignment="Left" />
-                                                    <TextBlock Height="12" Width="100" Background="Transparent" Margin="3,1"
-                                                               Text="{Binding StatusText}" FontStyle="Italic" FontSize="10"
-                                                               HorizontalAlignment="Left" />
+                                                <StackPanel DockPanel.Dock="Right">
+                                                    <StackPanel Orientation="Horizontal" Margin="15,8">
+                                                        <TextBlock HorizontalAlignment="Right"
+                                                                   VerticalAlignment="Center" Margin="0,2,2,0"
+                                                                   Text="开始时间：" FontSize="15" />
+                                                        <TextBox VerticalAlignment="Center" HorizontalAlignment="Right"
+                                                                 Margin="0,4,0,0" TextAlignment="Center" Padding="1"
+                                                                 Focusable="True" PreviewKeyDown="EndTextBoxInput"
+                                                                 Text="{Binding StartTimeHour}" Width="22"
+                                                                 FontSize="12" Background="Transparent"
+                                                                 BorderThickness="1" FontStretch="ExtraExpanded">
+                                                            <i:Interaction.Triggers>
+                                                                <i:EventTrigger EventName="LostFocus">
+                                                                    <i:InvokeCommandAction
+                                                                        Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
+                                                                        CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
+                                                                </i:EventTrigger>
+                                                            </i:Interaction.Triggers>
+                                                        </TextBox>
+                                                        <TextBlock HorizontalAlignment="Right"
+                                                                   VerticalAlignment="Center" Margin="4,0"
+                                                                   Text=":" FontSize="15" />
+                                                        <TextBox VerticalAlignment="Center" HorizontalAlignment="Right"
+                                                                 Margin="0,4,0,0" TextAlignment="Center" Padding="1"
+                                                                 Focusable="True" PreviewKeyDown="EndTextBoxInput"
+                                                                 Text="{Binding StartTimeMinute}" Width="22"
+                                                                 FontSize="12" Background="Transparent"
+                                                                 BorderThickness="1" FontStretch="ExtraExpanded">
+                                                            <i:Interaction.Triggers>
+                                                                <i:EventTrigger EventName="LostFocus">
+                                                                    <i:InvokeCommandAction
+                                                                        Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
+                                                                        CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
+                                                                </i:EventTrigger>
+                                                            </i:Interaction.Triggers>
+                                                        </TextBox>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" Margin="15,5">
+                                                        <TextBlock HorizontalAlignment="Right"
+                                                                   VerticalAlignment="Center" Margin="0,2,2,0"
+                                                                   Text="截止时间：" FontSize="15" />
+                                                        <TextBox VerticalAlignment="Center" HorizontalAlignment="Right"
+                                                                 Margin="0,4,0,0" TextAlignment="Center" Padding="1"
+                                                                 Focusable="True" PreviewKeyDown="EndTextBoxInput"
+                                                                 Text="{Binding EndTimeHour}" Width="22" FontSize="12"
+                                                                 Background="Transparent" BorderThickness="1"
+                                                                 FontStretch="ExtraExpanded">
+                                                            <i:Interaction.Triggers>
+                                                                <i:EventTrigger EventName="LostFocus">
+                                                                    <i:InvokeCommandAction
+                                                                        Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
+                                                                        CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
+                                                                </i:EventTrigger>
+                                                            </i:Interaction.Triggers>
+                                                        </TextBox>
+                                                        <TextBlock HorizontalAlignment="Right"
+                                                                   VerticalAlignment="Center" Margin="4,0"
+                                                                   Text=":" FontSize="15" />
+                                                        <TextBox VerticalAlignment="Center" HorizontalAlignment="Right"
+                                                                 Margin="0,4,0,0" TextAlignment="Center" Padding="1"
+                                                                 Focusable="True" PreviewKeyDown="EndTextBoxInput"
+                                                                 Text="{Binding EndTimeMinute}" Width="22"
+                                                                 FontSize="12" Background="Transparent"
+                                                                 BorderThickness="1" FontStretch="ExtraExpanded">
+                                                            <i:Interaction.Triggers>
+                                                                <i:EventTrigger EventName="LostFocus">
+                                                                    <i:InvokeCommandAction
+                                                                        Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
+                                                                        CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
+                                                                </i:EventTrigger>
+                                                            </i:Interaction.Triggers>
+                                                        </TextBox>
+                                                    </StackPanel>
                                                 </StackPanel>
-                                            </StackPanel>
-                                            <StackPanel DockPanel.Dock="Right">
-                                                <StackPanel Orientation="Horizontal" Margin="15,8">
-                                                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,2,2,0"
-                                                               Text="开始时间：" FontSize="15" />
-                                                    <TextBox VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,4,0,0" TextAlignment="Center" Padding="1" Focusable="True" PreviewKeyDown="EndTextBoxInput"
-                                                             Text="{Binding StartTimeHour}" Width="22" FontSize="12" Background="Transparent" BorderThickness="1" FontStretch="ExtraExpanded">
+                                                <Rectangle Width="4" Height="64" Fill="{StaticResource White4}"
+                                                           DockPanel.Dock="Right" HorizontalAlignment="Right" />
+                                                <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                                                    <ComboBox Style="{StaticResource MemoCategoryComboBox}"
+                                                              Background="{StaticResource White3}"
+                                                              HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                              Margin="8,0"
+                                                              SelectedIndex="{Binding CategoryIndex, Mode=TwoWay}">
                                                         <i:Interaction.Triggers>
-                                                            <i:EventTrigger EventName="LostFocus">
+                                                            <i:EventTrigger EventName="SelectionChanged">
                                                                 <i:InvokeCommandAction
                                                                     Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
                                                                     CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
                                                             </i:EventTrigger>
                                                         </i:Interaction.Triggers>
-                                                    </TextBox>
-                                                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0"
-                                                               Text=":" FontSize="15" />
-                                                    <TextBox VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,4,0,0" TextAlignment="Center" Padding="1" Focusable="True" PreviewKeyDown="EndTextBoxInput"
-                                                             Text="{Binding StartTimeMinute}" Width="22" FontSize="12" Background="Transparent" BorderThickness="1" FontStretch="ExtraExpanded">
-                                                        <i:Interaction.Triggers>
-                                                            <i:EventTrigger EventName="LostFocus">
-                                                                <i:InvokeCommandAction
-                                                                    Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
-                                                                    CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
-                                                            </i:EventTrigger>
-                                                        </i:Interaction.Triggers>
-                                                    </TextBox>
+                                                        <ComboBoxItem>
+                                                            <TextBlock Margin="-3,0" Text="---未分类---" FontSize="10"
+                                                                       HorizontalAlignment="Center"
+                                                                       VerticalAlignment="Center" Foreground="#555555" />
+                                                        </ComboBoxItem>
+                                                        <ComboBoxItem>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Ellipse Width="9" Height="9"
+                                                                         VerticalAlignment="Center" Fill="#91B9ff"
+                                                                         Margin="6,0" />
+                                                                <TextBlock Margin="4,-2,0,0" Text="日记" FontSize="12"
+                                                                           VerticalAlignment="Center"
+                                                                           Foreground="#444444" />
+                                                            </StackPanel>
+                                                        </ComboBoxItem>
+                                                        <ComboBoxItem>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Ellipse Width="9" Height="9"
+                                                                         VerticalAlignment="Center" Fill="#E16464"
+                                                                         Margin="6,0" />
+                                                                <TextBlock Margin="4,-2,0,0" Text="提醒" FontSize="12"
+                                                                           VerticalAlignment="Center"
+                                                                           Foreground="#444444" />
+                                                            </StackPanel>
+                                                        </ComboBoxItem>
+                                                        <ComboBoxItem>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Ellipse Width="9" Height="9"
+                                                                         VerticalAlignment="Center" Fill="#E1D77A"
+                                                                         Margin="6,0" />
+                                                                <TextBlock Margin="4,-2,0,0" Text="闹钟" FontSize="12"
+                                                                           VerticalAlignment="Center"
+                                                                           Foreground="#444444" />
+                                                            </StackPanel>
+                                                        </ComboBoxItem>
+                                                        <ComboBoxItem>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Ellipse Width="9" Height="9"
+                                                                         VerticalAlignment="Center" Fill="#7BD672"
+                                                                         Margin="6,0" />
+                                                                <TextBlock Margin="4,-2,0,0" Text="备忘录" FontSize="12"
+                                                                           VerticalAlignment="Center"
+                                                                           Foreground="#444444" />
+                                                            </StackPanel>
+                                                        </ComboBoxItem>
+                                                    </ComboBox>
                                                 </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Margin="15,5">
-                                                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,2,2,0"
-                                                               Text="截止时间：" FontSize="15" />
-                                                    <TextBox VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,4,0,0" TextAlignment="Center" Padding="1" Focusable="True" PreviewKeyDown="EndTextBoxInput"
-                                                             Text="{Binding EndTimeHour}" Width="22" FontSize="12" Background="Transparent" BorderThickness="1" FontStretch="ExtraExpanded">
-                                                        <i:Interaction.Triggers>
-                                                            <i:EventTrigger EventName="LostFocus">
-                                                                <i:InvokeCommandAction
-                                                                    Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
-                                                                    CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
-                                                            </i:EventTrigger>
-                                                        </i:Interaction.Triggers>
-                                                    </TextBox>
-                                                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4,0"
-                                                               Text=":" FontSize="15" />
-                                                    <TextBox VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,4,0,0" TextAlignment="Center" Padding="1" Focusable="True" PreviewKeyDown="EndTextBoxInput"
-                                                             Text="{Binding EndTimeMinute}" Width="22" FontSize="12" Background="Transparent" BorderThickness="1" FontStretch="ExtraExpanded">
-                                                        <i:Interaction.Triggers>
-                                                            <i:EventTrigger EventName="LostFocus">
-                                                                <i:InvokeCommandAction
-                                                                    Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
-                                                                    CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
-                                                            </i:EventTrigger>
-                                                        </i:Interaction.Triggers>
-                                                    </TextBox>
-                                                </StackPanel>
-                                            </StackPanel>
-                                            <Rectangle Width="4" Height="64" Fill="{StaticResource White4}"
-                                                       DockPanel.Dock="Right" HorizontalAlignment="Right" />
-                                            <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                                                <ComboBox Style="{StaticResource MemoCategoryComboBox}"
-                                                          Background="{StaticResource White3}"
-                                                          HorizontalAlignment="Right" VerticalAlignment="Center" Margin="8,0"
-                                                          SelectedIndex="{Binding CategoryIndex, Mode=TwoWay}">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="SelectionChanged">
-                                                            <i:InvokeCommandAction
-                                                                Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
-                                                                CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                    <ComboBoxItem>
-                                                        <TextBlock Margin="-3,0" Text="---未分类---" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#555555" />
-                                                    </ComboBoxItem>
-                                                    <ComboBoxItem>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <Ellipse Width="9" Height="9" VerticalAlignment="Center" Fill="#91B9ff" Margin="6,0" />
-                                                            <TextBlock Margin="4,-2,0,0" Text="日记" FontSize="12" VerticalAlignment="Center" Foreground="#444444" />
-                                                        </StackPanel>
-                                                    </ComboBoxItem>
-                                                    <ComboBoxItem>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <Ellipse Width="9" Height="9" VerticalAlignment="Center" Fill="#E16464" Margin="6,0" />
-                                                            <TextBlock Margin="4,-2,0,0" Text="提醒" FontSize="12" VerticalAlignment="Center" Foreground="#444444" />
-                                                        </StackPanel>
-                                                    </ComboBoxItem>
-                                                    <ComboBoxItem>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <Ellipse Width="9" Height="9" VerticalAlignment="Center" Fill="#E1D77A" Margin="6,0" />
-                                                            <TextBlock Margin="4,-2,0,0" Text="闹钟" FontSize="12" VerticalAlignment="Center" Foreground="#444444" />
-                                                        </StackPanel>
-                                                    </ComboBoxItem>
-                                                    <ComboBoxItem>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <Ellipse Width="9" Height="9" VerticalAlignment="Center" Fill="#7BD672" Margin="6,0" />
-                                                            <TextBlock Margin="4,-2,0,0" Text="备忘录" FontSize="12" VerticalAlignment="Center" Foreground="#444444" />
-                                                        </StackPanel>
-                                                    </ComboBoxItem>
-                                                </ComboBox>
-                                            </StackPanel>
+                                            </DockPanel>
                                         </DockPanel>
-                                    </DockPanel>
-                                </Border>
+                                    </Border>
+                                    <StackPanel DockPanel.Dock="Right" Width="36" Margin="12,0" VerticalAlignment="Center">
+                                        <Button Width="36" Height="20" HorizontalAlignment="Center" Margin="0,0,0,10" VerticalAlignment="Top" Content="上移"></Button>
+                                        <Button Width="36" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" Content="删除"
+                                                Command="{Binding ElementName=This, Path=DataContext.DeleteSpecific}"
+                                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}"></Button>
+                                        <Button Width="36" Height="20" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Bottom" Content="下移"></Button>
+                                    </StackPanel>
+                                </DockPanel>
                                 <Button Width="100" Height="36"
                                         Background="{StaticResource White2}" FontSize="16"
                                         Command="{Binding ElementName=This, Path=DataContext.AddMemoCommand}"
