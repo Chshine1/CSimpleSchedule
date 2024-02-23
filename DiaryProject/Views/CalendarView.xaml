@@ -46,16 +46,25 @@
                 </Border>
                 
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                    <Button Height="60" Width="50" Margin="6,0" Command="{Binding ExpandEditor}">
-                        <TextBlock Text="展开&#x000A;编辑" />
+                    <Button Style="{StaticResource EditorHeaderButton}" Height="60" Width="52" Margin="6,0" Command="{Binding ExpandEditor}">
+                        <StackPanel>
+                            <mat:PackIcon Kind="ExpandAll" HorizontalAlignment="Center" Margin="0,3" Width="25" Height="25" Foreground="DimGray" />
+                            <TextBlock Text="展开编辑" FontSize="9" Margin="0,3" Foreground="DimGray" />
+                        </StackPanel>
                     </Button>
-                    <Button Height="60" Width="50" Margin="6,0"
+                    <Button Style="{StaticResource EditorHeaderButton}" Height="60" Width="52" Margin="6,0"
                             Command="{Binding LocateToToday}">
-                        <TextBlock Text="定位到&#x000A;今天" />
+                        <StackPanel>
+                            <mat:PackIcon Kind="CalendarSync" HorizontalAlignment="Center" Margin="0,3" Width="25" Height="25" Foreground="DimGray" />
+                            <TextBlock Text="回到今天" FontSize="9" Margin="0,3" Foreground="DimGray" />
+                        </StackPanel>
                     </Button>
-                    <Button Height="60" Width="50" Margin="6,0"
+                    <Button Style="{StaticResource EditorHeaderButton}" Height="60" Width="52" Margin="6,0"
                             Command="{Binding LocateToSelected}">
-                        <TextBlock Text="定位到&#x000A;选择" />
+                        <StackPanel>
+                            <mat:PackIcon Kind="CalendarStart" HorizontalAlignment="Center" Margin="0,3" Width="25" Height="25" Foreground="DimGray" />
+                            <TextBlock Text="转到选择" FontSize="9" Margin="0,3" Foreground="DimGray" />
+                        </StackPanel>
                     </Button>
                     <!--<Button Height="60" Width="50" Margin="6,0">
                         <TextBlock Text="复制&#x000A;单元格" />
@@ -63,9 +72,12 @@
                     <Button Height="60" Width="50" Margin="6,0">
                         <TextBlock Text="粘贴&#x000A;单元格" />
                     </Button>-->
-                    <Button Height="60" Width="50" Margin="6,0"
+                    <Button Style="{StaticResource EditorHeaderButton}" Height="60" Width="52" Margin="6,0"
                             Command="{Binding ClearSelected}">
-                        <TextBlock Text="清空&#x000A;单元格" />
+                        <StackPanel>
+                            <mat:PackIcon Kind="DeleteSweep" HorizontalAlignment="Center" Margin="0,3" Width="25" Height="25" Foreground="DimGray" />
+                            <TextBlock Text="清空单元格" FontSize="9" Margin="0,3" Foreground="DimGray" />
+                        </StackPanel>
                     </Button>
                     <!--<Button Height="60" Width="50" Margin="6,0"
                             Command="{Binding TestCommand}">

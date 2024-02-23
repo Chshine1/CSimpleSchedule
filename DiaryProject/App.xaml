@@ -378,6 +378,31 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            
+            <Style x:Key="EditorHeaderButton" TargetType="Button">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="BackgroundBorder" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" CornerRadius="4"
+                                    Background="{StaticResource White2}" BorderThickness="0">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="BackgroundBorder" Property="Background" Value="{StaticResource White4}" />
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True" />
+                                        <Condition Property="IsPressed" Value="False" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="BackgroundBorder" Property="Background" Value="{StaticResource White3}" />
+                                </MultiTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </prism:PrismApplication>
