@@ -31,9 +31,9 @@ public partial class App : PrismApplication
         
         containerRegistry.RegisterSingleton<TimerService>();
         
-        containerRegistry.GetContainer().Register<IMemoLocalRepository,MemoLocalRepository>(made: Parameters.Of.Type<string>(serviceKey: "localFolder"));
         var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        containerRegistry.RegisterInstance(path + @"\CSimpleSchedule\visitor\save.db", "localFolder");
+        containerRegistry.GetContainer().Register<IMemoLocalRepository,MemoLocalRepository>(made: Parameters.Of.Type<string>(serviceKey: "localFolder"));
+        containerRegistry.RegisterInstance(path + @"\CSimpleSchedule\visitor", "localFolder");
         containerRegistry.Register<IMemoService, MemoService>();
         containerRegistry.Register<IUserService, UserService>();
         

@@ -57,8 +57,9 @@ public class TimerService(IEventAggregator aggregator)
         aggregator.GetEvent<TimerStatusChanged>().Publish(new TimerStatusChangedModel { Id = id, Status = false, SendNotification = false});
     }
     
-    public void RegisterToTimers(MemoRecord memo)
+    public void RegisterToTimers(MemoRecord? memo)
     {
+        if (memo == null) return;
         // 在流程开始时清除对id的追踪
         var id = memo.Id;
         DropTracing(id);

@@ -10,9 +10,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c4b3c6d3-5dce-44e4-a281-11a42dac8dfe" name="Changes" comment="feat:程序主体">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.DiaryProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DiaryProject/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="c4b3c6d3-5dce-44e4-a281-11a42dac8dfe" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -278,15 +276,7 @@
       <workItem from="1708568139893" duration="9791000" />
       <workItem from="1708580900411" duration="1332000" />
       <workItem from="1708582278019" duration="753000" />
-      <workItem from="1708583113568" duration="2437000" />
-    </task>
-    <task id="LOCAL-00021" summary="feat:Add memo in the editor">
-      <option name="closed" value="true" />
-      <created>1707571613148</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1707571613148</updated>
+      <workItem from="1708583113568" duration="2761000" />
     </task>
     <task id="LOCAL-00022" summary="feat:Adding memo function completed">
       <option name="closed" value="true" />
@@ -672,7 +662,15 @@
       <option name="project" value="LOCAL" />
       <updated>1708610797117</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="fix(LoginViewModel):修复了本地数据库无数据时无法正常加载的问题">
+      <option name="closed" value="true" />
+      <created>1708611718095</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1708611718095</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -684,7 +682,6 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="feat:Change the category of memos with the corresponding display" />
     <MESSAGE value="feat:Time component added in the editor" />
     <MESSAGE value="feat:Time component finished in editor&#10;fix:Fixed local database operations" />
     <MESSAGE value="feat:Memo active can be edited" />
@@ -709,7 +706,8 @@
     <MESSAGE value="fix:The server and the client are synchronized now" />
     <MESSAGE value="feat:Synchronize local data to the server" />
     <MESSAGE value="feat:程序主体" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat:程序主体" />
+    <MESSAGE value="fix(LoginViewModel):修复了本地数据库无数据时无法正常加载的问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(LoginViewModel):修复了本地数据库无数据时无法正常加载的问题" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
