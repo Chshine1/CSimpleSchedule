@@ -5,128 +5,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:DiaryProject.Utils"
+             xmlns:mat="http://materialdesigninxaml.net/winfx/xaml/themes"
              x:Name="This"
              mc:Ignorable="d"
              d:DesignHeight="728" d:DesignWidth="970">
     <DockPanel Width="970" Height="728" Background="{StaticResource White4}">
         <TextBlock Height="0" Width="0" x:Name="FocusHolder" Focusable="True" IsEnabled="True" />
         
-        <!--<ScrollViewer>
-            <StackPanel>
-                <StackPanel>
-                    <Border HorizontalAlignment="Center"
-                            Width="900" MaxHeight="300" CornerRadius="4" Margin="0,20"
-                            Background="{StaticResource White2}"
-                            x:Name="MemoPresenter">
-                        <Border.Effect>
-                            <DropShadowEffect Opacity="0.3" />
-                        </Border.Effect>
-                        <DockPanel LastChildFill="True">
-                            <DockPanel DockPanel.Dock="Top" MaxHeight="300">
-                                <ProgressBar DockPanel.Dock="Top" Height="4" IsIndeterminate="True"
-                                             BorderThickness="0" Background="Transparent"
-                                             Foreground="{StaticResource Blue2}"
-                                             Visibility="{Binding IsProgressBarActive}" />
-                                <Expander DockPanel.Dock="Bottom" Style="{StaticResource MemoEditorExpander}"
-                                          Background="{StaticResource White2}">
-                                    <StackPanel Height="210" Width="900">
-                                        <local:RichTextBoxHelper x:Name="ContentBox" Height="150"
-                                                                 Width="850" Margin="0,25,0,10"
-                                                                 Document="{Binding ContentDocument}">
-                                        </local:RichTextBoxHelper>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
-                                                    Margin="20,0">
-                                            <Button Width="80" Height="20" Margin="10,0"
-                                                    Command="{Binding ElementName=This, Path=DataContext.ConfirmContentInput}"
-                                                    CommandParameter="{Binding ElementName=ContentBox}">
-                                                <TextBlock Text="Confirm" />
-                                            </Button>
-                                            <Button Width="80" Height="20" Margin="10,0"
-                                                    HorizontalAlignment="Right">
-                                                <TextBlock Text="Cancel" />
-                                            </Button>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Expander>
-                                <StackPanel DockPanel.Dock="Left" Margin="10,4" Orientation="Horizontal"
-                                            VerticalAlignment="Center">
-                                    <ToggleButton Margin="0,2,14,0"
-                                                  Style="{StaticResource MemoEditorToggle}"
-                                                  Foreground="{Binding HeaderColor}"
-                                                  Background="{StaticResource Blue4}"
-                                                  HorizontalAlignment="Center" VerticalAlignment="Top"
-                                                  ToolTip="打开/关闭提醒" ToolTipService.InitialShowDelay="500">
-                                    </ToggleButton>
-                                    <StackPanel>
-                                        <TextBox BorderThickness="0" Background="Transparent" MinWidth="20"
-                                                 VerticalAlignment="Center"
-                                                 Text="{Binding Memo.Title, Mode=TwoWay}"
-                                                 VerticalContentAlignment="Center" FontSize="20"
-                                                 PreviewKeyDown="EndTextBoxInput" Focusable="True">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="LostFocus">
-                                                    <i:InvokeCommandAction
-                                                        Command="{Binding ElementName=This, Path=DataContext.ContentUpdateCommand}"
-                                                        CommandParameter="{Binding ElementName=MemoPresenter, Path=DataContext}" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </TextBox>
-                                        <TextBlock Height="12" Width="100" Background="Transparent" Margin="3,1"
-                                                   Text="事件类别：未归类" FontStyle="Italic" FontSize="10"
-                                                   HorizontalAlignment="Left" />
-                                        <TextBlock Height="12" Width="100" Background="Transparent" Margin="3,1"
-                                                   Text="状态：进行中" FontStyle="Italic" FontSize="10"
-                                                   HorizontalAlignment="Left" />
-                                    </StackPanel>
-                                </StackPanel>
-                                <StackPanel DockPanel.Dock="Right">
-                                    <TextBlock HorizontalAlignment="Right"
-                                               VerticalAlignment="Center" Margin="15,9"
-                                               Text="开始：2024/2/9 10:08" FontSize="15" />
-                                    <TextBlock HorizontalAlignment="Right" DockPanel.Dock="Right"
-                                               VerticalAlignment="Center" Margin="15,6"
-                                               Text="截止：2024/2/9 11:08" FontSize="15" />
-                                </StackPanel>
-                                <Rectangle Width="4" Height="64" Fill="{StaticResource White4}"
-                                           DockPanel.Dock="Right" HorizontalAlignment="Right" />
-                                <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                                    <ComboBox Style="{StaticResource MemoCategoryComboBox}"
-                                              Background="{StaticResource White3}" IsDropDownOpen="True"
-                                              HorizontalAlignment="Right" VerticalAlignment="Center" Margin="8,0">
-                                        <ComboBoxItem>#1</ComboBoxItem>
-                                        <ComboBoxItem>#2</ComboBoxItem>
-                                        <ComboBoxItem>#3</ComboBoxItem>
-                                    </ComboBox>
-                                </StackPanel>
-                            </DockPanel>
-                        </DockPanel>
-                    </Border>
-                    <Button Width="100" Height="36"
-                            Background="{StaticResource White2}" FontSize="16"
-                            Command="{Binding ElementName=This, Path=DataContext.AddMemoCommand}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}">
-                        <TextBlock Text="添加备忘录" />
-                    </Button>
-                </StackPanel>
-            </StackPanel>
-        </ScrollViewer>-->
-
         <ScrollViewer>
             <StackPanel>
-                <Button Width="100" Height="36" HorizontalAlignment="Center" DockPanel.Dock="Top"
-                        Margin="0,18,0,0"
-                        Background="{StaticResource White2}" FontSize="16"
-                        Command="{Binding AddFirstMemoCommand}">
-                    <TextBlock Text="添加备忘录" />
-                </Button>
-
                 <ItemsControl ItemsSource="{Binding MemoModels}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="10,0">
+                            <StackPanel Margin="20,0,0,0">
                                 <DockPanel HorizontalAlignment="Center">
                                     <Border HorizontalAlignment="Left" DockPanel.Dock="Left"
-                                            Width="850" MaxHeight="300" CornerRadius="4" Margin="0,20"
+                                            Width="855" MaxHeight="300" CornerRadius="4" Margin="0,12"
                                             Background="{Binding BackgroundColor}"
                                             BorderThickness="2" BorderBrush="{Binding HeaderColor}"
                                             x:Name="MemoPresenter">
@@ -348,24 +242,111 @@
                                             </DockPanel>
                                         </DockPanel>
                                     </Border>
-                                    <StackPanel DockPanel.Dock="Right" Width="36" Margin="12,0" VerticalAlignment="Center">
-                                        <Button Width="36" Height="20" HorizontalAlignment="Center" Margin="0,0,0,10" VerticalAlignment="Top" Content="上移"></Button>
-                                        <Button Width="36" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" Content="删除"
+                                    <StackPanel DockPanel.Dock="Right" Width="36" Margin="16,0,10,0" VerticalAlignment="Center">
+                                        <!--<Button Width="36" Height="20" HorizontalAlignment="Center" Margin="0,0,0,10" VerticalAlignment="Top" Content="上移" />-->
+                                        <Button Width="36" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center"
                                                 Command="{Binding ElementName=This, Path=DataContext.DeleteSpecific}"
-                                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}"></Button>
-                                        <Button Width="36" Height="20" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Bottom" Content="下移"></Button>
+                                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Grid>
+                                                                    <Ellipse x:Name="BackButton" HorizontalAlignment="Center"
+                                                                             VerticalAlignment="Center"
+                                                                             Width="{TemplateBinding Width}"
+                                                                             Height="{TemplateBinding Height}"
+                                                                             Fill="{StaticResource White2}">
+                                                                        <Ellipse.Effect>
+                                                                            <DropShadowEffect Opacity="0.2"
+                                                                                ShadowDepth="0" BlurRadius="10" />
+                                                                        </Ellipse.Effect>
+                                                                    </Ellipse>
+                                                                    <mat:PackIcon x:Name="ForeIcon" Grid.ZIndex="1" Kind="DeleteOutline" Foreground="DimGray"
+                                                                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                                </Grid>
+
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsPressed" Value="True">
+                                                                        <Setter TargetName="BackButton" Property="Fill" Value="DarkRed" />
+                                                                        <Setter TargetName="ForeIcon" Property="Foreground" Value="LightGray" />
+                                                                        <Setter TargetName="ForeIcon" Property="Kind" Value="DeleteEmpty" />
+                                                                    </Trigger>
+
+                                                                    <MultiTrigger>
+                                                                        <MultiTrigger.Conditions>
+                                                                            <Condition Property="IsPressed"
+                                                                                Value="False" />
+                                                                            <Condition Property="IsMouseOver"
+                                                                                Value="True" />
+                                                                        </MultiTrigger.Conditions>
+                                                                        <Setter TargetName="BackButton" Property="Fill" Value="#E16464" />
+                                                                        <Setter TargetName="ForeIcon" Property="Foreground" Value="White" />
+                                                                        <Setter TargetName="ForeIcon" Property="Kind" Value="DeleteEmpty" />
+                                                                    </MultiTrigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                        <!--<Button Width="36" Height="20" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Bottom" Content="下移" />-->
                                     </StackPanel>
                                 </DockPanel>
-                                <Button Width="100" Height="36"
+                                <!--<Button Width="100" Height="36"
                                         Background="{StaticResource White2}" FontSize="16"
                                         Command="{Binding ElementName=This, Path=DataContext.AddMemoCommand}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}">
                                     <TextBlock Text="添加备忘录" />
-                                </Button>
+                                </Button>-->
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                
+                <Button Width="50" Height="50" HorizontalAlignment="Center" DockPanel.Dock="Top"
+                        Margin="8,8,0,18"
+                        Background="{StaticResource Blue2}" FontSize="16"
+                        Command="{Binding AddFirstMemoCommand}">
+                    <mat:PackIcon Foreground="White" Kind="Plus" Width="40" Height="40" />
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Grid>
+                                            <Ellipse HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                     Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{TemplateBinding Background}">
+                                                <Ellipse.Effect>
+                                                    <DropShadowEffect Opacity="0.2" ShadowDepth="0" BlurRadius="10" />
+                                                </Ellipse.Effect>
+                                            </Ellipse>
+                                            <ContentPresenter Grid.ZIndex = "1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            <Ellipse x:Name="Mask" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ZIndex = "2"
+                                                     Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="Black" Opacity="0" />
+                                        </Grid>
+                                        
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="Mask" Property="Opacity" Value="0.15" />
+                                            </Trigger>
+                                            
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsPressed" Value="False" />
+                                                    <Condition Property="IsMouseOver" Value="True" />
+                                                </MultiTrigger.Conditions>
+                                                <Setter TargetName="Mask" Property="Opacity" Value="0.06" />
+                                            </MultiTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </StackPanel>
         </ScrollViewer>
     </DockPanel>

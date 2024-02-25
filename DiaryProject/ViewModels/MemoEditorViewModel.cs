@@ -104,6 +104,7 @@ public class MemoEditorViewModel : NavigationModel
         _timerService.RegisterToTimers(memo.Memo);
     }
 
+    /* TODO:This is no longer needed, try refactor */
     private async void AddMemoAtPosition(int position)
     {
         Aggregator.UpdateLoadingStatus(true);
