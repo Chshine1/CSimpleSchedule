@@ -12,6 +12,7 @@ using DiaryProject.Service;
 using DiaryProject.Service.Local;
 using DiaryProject.Service.Web;
 using DiaryProject.Shared.Dtos;
+using DiaryProject.Shared.Utils;
 using DiaryProject.Utils;
 using RichTextBox = System.Windows.Controls.RichTextBox;
 
@@ -26,6 +27,8 @@ public class MemoEditorViewModel : NavigationModel
     private readonly TimerService _timerService;
 
     private DateTime _editedTime;
+
+    public string DateString => TimeProcessor.GetCalendarTitleDate(_editedTime);
     
     private ObservableCollection<EditableMemoModel> _memoModels;
 
@@ -59,6 +62,7 @@ public class MemoEditorViewModel : NavigationModel
             }
             MemoModels = memos;
             _editedTime = arg.EditedDate;
+            RaisePropertyChanged(nameof(DateString));
         });
         // 改变备忘录的视觉表现状态
         Aggregator.GetEvent<TimerStatusChanged>().Subscribe(arg =>

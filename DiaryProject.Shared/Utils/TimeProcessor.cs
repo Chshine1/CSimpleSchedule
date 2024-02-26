@@ -52,4 +52,9 @@ public static class TimeProcessor
     {
         return $"{dateTime.Year}年  {MonthNames[dateTime.Month - 1]}月";
     }
+
+    public static string GetCalendarTitleDate(DateTime dateTime)
+    {
+        return $"{dateTime.Year}年 {dateTime.Month}月{dateTime.Day}日";
+    }
 }
