@@ -73,8 +73,7 @@ public class CalendarViewModel : NavigationModel
             RaisePropertyChanged();
         }
     }
-
-    /* TODO:This is only used for getting the listbox, try reformatting this in latter updates */
+    
     public DelegateCommand<ListBox> SelectCommand { get; private set; }
 
     public DelegateCommand NextPage { get; private set; }

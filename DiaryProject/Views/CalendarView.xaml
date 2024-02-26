@@ -94,7 +94,7 @@
                  Background="{StaticResource White4}"
                  SelectionMode="Single">
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
+                <i:EventTrigger EventName="Loaded">
                     <i:InvokeCommandAction Command="{Binding SelectCommand}"
                                            CommandParameter="{Binding ElementName=Calendar}"/>
                 </i:EventTrigger>
