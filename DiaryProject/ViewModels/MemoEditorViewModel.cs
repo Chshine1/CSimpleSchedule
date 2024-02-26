@@ -40,10 +40,8 @@ public class MemoEditorViewModel : NavigationModel
     }
 
     public DelegateCommand<EditableMemoModel> ContentUpdateCommand { get; set; }
-    public DelegateCommand<EditableMemoModel> AddMemoCommand { get; set; }
-
     public DelegateCommand<EditableMemoModel> DeleteSpecific { get; set; }
-    public DelegateCommand AddFirstMemoCommand { get; set; }
+    public DelegateCommand AddMemoCommand { get; set; }
     public DelegateCommand<RichTextBox> ConfirmContentInput { get; set; }
 
     public MemoEditorViewModel(IEventAggregator aggregator, IMemoService memoService, IMapper mapper, IMemoLocalRepository memoRepository, TimerService timerService) : base(aggregator)
@@ -71,8 +69,7 @@ public class MemoEditorViewModel : NavigationModel
         });
         _memoModels = new ObservableCollection<EditableMemoModel>();
         ContentUpdateCommand = new DelegateCommand<EditableMemoModel>(UpdateMemo);
-        AddMemoCommand = new DelegateCommand<EditableMemoModel>(e => AddMemoAtPosition(e.Memo.Order + 1));
-        AddFirstMemoCommand = new DelegateCommand(() => AddMemoAtPosition(0));
+        AddMemoCommand = new DelegateCommand(AddMemoAtPosition);
         ConfirmContentInput = new DelegateCommand<RichTextBox>(textBox =>
         {
             var content = new TextRange(textBox.Document.ContentStart, textBox.Document.ContentEnd).Text;
@@ -104,11 +101,10 @@ public class MemoEditorViewModel : NavigationModel
         _timerService.RegisterToTimers(memo.Memo);
     }
 
-    /* TODO:This is no longer needed, try refactor */
-    private async void AddMemoAtPosition(int position)
+    private async void AddMemoAtPosition()
     {
         Aggregator.UpdateLoadingStatus(true);
-        var latterMemos = from memo in _memoModels where memo.Memo.Order >= position select memo.Memo;
+        /*var latterMemos = from memo in _memoModels where memo.Memo.Order >= position select memo.Memo;
         foreach (var memo in latterMemos)
         {
 #if LOCAL
@@ -125,7 +121,7 @@ public class MemoEditorViewModel : NavigationModel
             await _memoRepository.UpdateAsync(changeModel);
             if (App.IsUserRegistered) await _memoService.UpdateAsync(changeModel);
 #endif
-        }
+        }*/
         var t = _editedTime.Date == DateTime.Today ? DateTime.Now : _editedTime;
         if (t is { Hour: 23, Minute: 59 }) t = t.AddMinutes(-1);
 #if LOCAL
@@ -144,7 +140,7 @@ public class MemoEditorViewModel : NavigationModel
         var memoDto = new MemoDto
         {
             Id = 0,
-            Order = position,
+            Order = _memoModels.Count,
             Active = false,
             Category = 1,
             Title = string.Empty,
@@ -157,7 +153,7 @@ public class MemoEditorViewModel : NavigationModel
 #endif        
         var memoRecord = _mapper.Map<MemoRecord>(result.Result);
         _timerService.RegisterToTimers(memoRecord);
-        _memoModels.Insert(position, new EditableMemoModel(memoRecord));
+        _memoModels.Insert(_memoModels.Count, new EditableMemoModel(memoRecord));
         Aggregator.UpdateLoadingStatus(false);
     }
 
