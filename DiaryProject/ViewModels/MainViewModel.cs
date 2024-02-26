@@ -115,9 +115,9 @@ public class MainViewModel : BindableBase
 
         _menuItemModels = new ObservableCollection<MenuItemModel>
         {
-            new() { Icon = "AccountCircle", TargetName = nameof(LoginView), IsPageEnabled = true, IsAccount = true},
-            new() { Icon = "CalendarMonth", TargetName = nameof(CalendarView), IsPageEnabled = false, IsAccount = false},
-            new() { Icon = "Notebook", TargetName = nameof(MemoEditorView), IsPageEnabled = false, IsAccount = false}
+            new() { Icon = "AccountCircle", TargetName = nameof(LoginView), IsPageEnabled = true, IsAccount = true, ToolTipText = "用户"},
+            new() { Icon = "CalendarMonth", TargetName = nameof(CalendarView), IsPageEnabled = false, IsAccount = false, ToolTipText = "日历"},
+            new() { Icon = "Notebook", TargetName = nameof(MemoEditorView), IsPageEnabled = false, IsAccount = false, ToolTipText = "编辑日程"}
         };
 
         _calendarTitleModelModel = new MonthModel(DateTime.Now);

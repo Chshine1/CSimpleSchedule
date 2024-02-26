@@ -45,7 +45,7 @@
                     </DockPanel>
                 </Border>
                 
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <StackPanel Margin="6,0" Orientation="Horizontal" DockPanel.Dock="Left">
                     <Button Style="{StaticResource EditorHeaderButton}" Height="60" Width="52" Margin="6,0" Command="{Binding ExpandEditor}">
                         <StackPanel>
                             <mat:PackIcon Kind="ExpandAll" HorizontalAlignment="Center" Margin="0,3" Width="25" Height="25" Foreground="DimGray" />
@@ -106,7 +106,8 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Vertical" MaxWidth="135">
+                    <StackPanel Orientation="Vertical" MaxWidth="135" ToolTip="双击以编辑"
+                                ToolTipService.IsEnabled="{Binding IsSelected}" ToolTipService.InitialShowDelay="500">
                         <StackPanel.InputBindings>
                             <MouseBinding MouseAction="LeftDoubleClick"
                                           Command="{Binding ElementName=This, Path=DataContext.ExpandEditor}" />

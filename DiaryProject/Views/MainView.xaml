@@ -112,6 +112,7 @@
                         <Border Width="40" Background="{StaticResource White2}"
                                 BorderThickness="0,0,2,0"
                                 BorderBrush="{StaticResource White1}">
+                            <!--TODO:The events here need refactoring-->
                             <ListBox x:Name="MenuBar"
                                      BorderThickness="0"
                                      Background="Transparent"
@@ -129,7 +130,8 @@
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <mat:PackIcon Kind="{Binding Icon}" HorizontalAlignment="Center"
-                                                      Width="22" Height="22" Foreground="{Binding IconColor}" />
+                                                      Width="22" Height="22" Foreground="{Binding IconColor}"
+                                                      ToolTip="{Binding ToolTipText}" ToolTipService.InitialShowDelay="500"/>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>

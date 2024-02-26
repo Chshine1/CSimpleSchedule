@@ -32,6 +32,7 @@ public class MemoModel : BindableBase, INotifyPropertyChanged
         {
             _isSelected = value;
             OnPropertyChanged(nameof(DateText));
+            OnPropertyChanged();
         }
     }
 

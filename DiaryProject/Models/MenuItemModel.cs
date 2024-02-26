@@ -16,6 +16,8 @@ public class MenuItemModel : INotifyPropertyChanged
 
     public bool IsAccount { get; init; }
 
+    public required string ToolTipText { get; init; }
+
     private bool _isPageEnabled;
     public bool IsPageEnabled
     {

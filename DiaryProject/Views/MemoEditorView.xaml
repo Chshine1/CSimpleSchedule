@@ -274,7 +274,8 @@
                                     <StackPanel DockPanel.Dock="Right" Width="36" Margin="16,0,10,0" VerticalAlignment="Center">
                                         <Button Width="36" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center"
                                                 Command="{Binding ElementName=This, Path=DataContext.DeleteSpecific}"
-                                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}">
+                                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}"
+                                                ToolTip="删除">
                                             <Button.Style>
                                                 <Style TargetType="Button">
                                                     <Setter Property="Template">
@@ -330,7 +331,8 @@
                 <Button Width="50" Height="50" HorizontalAlignment="Center" DockPanel.Dock="Top"
                         Margin="8,0,0,18"
                         Background="{StaticResource Blue2}" FontSize="16"
-                        Command="{Binding AddMemoCommand}">
+                        Command="{Binding AddMemoCommand}"
+                        ToolTip="添加日程">
                     <mat:PackIcon Foreground="White" Kind="Plus" Width="40" Height="40" />
                     <Button.Style>
                         <Style TargetType="Button">

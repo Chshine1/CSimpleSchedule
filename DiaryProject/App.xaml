@@ -158,7 +158,8 @@
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="{x:Type ToggleButton}">
                                                             <Border x:Name="Mask" Padding="{TemplateBinding Padding}"
-                                                                    Width="900" Height="16" CornerRadius="0,0,4,4" BorderThickness="0">
+                                                                    Width="900" Height="16" CornerRadius="0,0,4,4" BorderThickness="0"
+                                                                    ToolTip="展开编辑">
                                                                 <Border.Background>
                                                                     <SolidColorBrush Color="Black" Opacity="0.001" />
                                                                 </Border.Background>
@@ -168,6 +169,7 @@
                                                             <ControlTemplate.Triggers>
                                                                 <Trigger Property="IsChecked" Value="True">
                                                                     <Setter Property="Kind" TargetName="Arrow" Value="ChevronUp" />
+                                                                    <Setter Property="ToolTip" TargetName="Mask" Value="收起编辑" />
                                                                 </Trigger>
                                                                 <Trigger Property="IsMouseOver" Value="True">
                                                                     <Setter Property="Foreground" TargetName="Arrow" Value="#444444" />
