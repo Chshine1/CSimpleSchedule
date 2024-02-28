@@ -3,14 +3,12 @@
 
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Windows.Controls;
 using AutoMapper;
 using DiaryProject.Events;
 using DiaryProject.Models;
 using DiaryProject.Service;
 using DiaryProject.Service.Local;
 using DiaryProject.Service.Web;
-using DiaryProject.Shared.Parameters;
 using DiaryProject.Shared.Utils;
 using DiaryProject.Utils;
 using ListBox = System.Windows.Controls.ListBox;
@@ -21,10 +19,21 @@ namespace DiaryProject.ViewModels;
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public class CalendarViewModel : NavigationModel
 {
+    private readonly IMapper _mapper;
+    private readonly IMemoLocalRepository _memoRepository;
+
+    /// <summary>
+    /// The ListBox used for exhibiting the memos
+    /// </summary>
+    private ListBox? _listBox;
+
+    #region BoundProperties
+
+    // ReSharper disable once NullableWarningSuppressionIsUsed
+    private MonthModel _currentPage = null!;
     /// <summary>
     /// The month which the calendar is currently located
     /// </summary>
-    private MonthModel _currentPage = null!;
     public MonthModel CurrentPage 
     {
         get => _currentPage;
@@ -35,19 +44,8 @@ public class CalendarViewModel : NavigationModel
         }
     }
     
-    // Injected services
-    private readonly IMemoService _memoService;
-    private readonly IMapper _mapper;
-    private readonly IMemoLocalRepository _memoRepository;
-    private readonly TimerService _timerService;
-
-    /// <summary>
-    /// The ListBox which is used for exhibiting the memos
-    /// </summary>
-    private ListBox? _listBox;
-    
-    private MemoModel? _selectedMemo; // The selected memo
-    public MemoModel? SelectedMemo // One-way bound property to get the user selection 
+    private MemoModel? _selectedMemo;
+    public MemoModel? SelectedMemo
     {
         get => _selectedMemo;
         set
@@ -62,8 +60,8 @@ public class CalendarViewModel : NavigationModel
         }
     }
     
-    private ObservableCollection<MemoModel> _bigPanels = null!; // Items of models in the calendar
-
+    // ReSharper disable once NullableWarningSuppressionIsUsed
+    private ObservableCollection<MemoModel> _bigPanels = null!;
     public ObservableCollection<MemoModel> BigPanels
     {
         get => _bigPanels;
@@ -75,7 +73,6 @@ public class CalendarViewModel : NavigationModel
     }
     
     public DelegateCommand<ListBox> SelectCommand { get; private set; }
-
     public DelegateCommand NextPage { get; private set; }
     public DelegateCommand LastPage { get; private set; }
     public DelegateCommand ExpandEditor { get; private set; }
@@ -83,19 +80,13 @@ public class CalendarViewModel : NavigationModel
     public DelegateCommand LocateToSelected { get; private set; }
     public DelegateCommand ClearSelected { get; private set; }
 
+    #endregion
+
     public CalendarViewModel(IMemoService memoService, IEventAggregator aggregator, IMapper mapper, IRegionManager regionManager, IMemoLocalRepository memoRepository, TimerService timerService) : base(aggregator)
     {
-        _memoService = memoService;
         _mapper = mapper;
         _memoRepository = memoRepository;
-        _timerService = timerService;
-        Aggregator.GetEvent<ActionNotified>().Subscribe(n =>
-        {
-            if (n.ActionToNotify != ActionsToNotify.PassToMemoEditor || _selectedMemo == null) return;
-            Aggregator.PassToEditor(_selectedMemo.GetMemos(), _selectedMemo.Date);
-        });
-        Aggregator.UpdateEditorStatus(false);
-        RefreshCalendarByMonth(DateTime.Now);
+        
         SelectCommand = new DelegateCommand<ListBox>(m => { _listBox = m; });
         NextPage = new DelegateCommand(() => { RefreshCalendarByMonth(CurrentPage.NextMonth()); });
         LastPage = new DelegateCommand(() => { RefreshCalendarByMonth(CurrentPage.LastMonth()); });
@@ -115,20 +106,27 @@ public class CalendarViewModel : NavigationModel
                 _timerService.DropTracing(id);
 #else
                 _memoRepository.DeleteAsync(id);
-                _timerService.DropTracing(id);
-                if (App.IsUserRegistered) _memoService.DeleteAsync(id);
+                timerService.DropTracing(id);
+                if (App.IsUserRegistered) memoService.DeleteAsync(id);
 #endif
             }
 
             _selectedMemo?.Clear();
         });
+        
+        // Called when the editor tells this to send the current selected day for editing
+        Aggregator.GetEvent<ActionNotified>().Subscribe(n =>
+        {
+            if (n.ActionToNotify != ActionsToNotify.PassToMemoEditor || _selectedMemo == null) return;
+            Aggregator.PassToEditor(_selectedMemo.GetMemos(), _selectedMemo.Date);
+        });
+        
+        // The user can't use the editor at the beginning since there is no selected date
+        Aggregator.UpdateEditorStatus(false);
+        RefreshCalendarByMonth(DateTime.Now);
     }
 
-    public override void OnNavigatedTo(NavigationContext navigationContext)
-    {
-        base.OnNavigatedTo(navigationContext);
-        RefreshCalendarByMonth(_selectedMemo?.Date ?? DateTime.Now);
-    }
+    #region PrivateMethods
 
     /// <summary>
     /// Switch to one month and refresh the contents in the calendar 
@@ -145,6 +143,7 @@ public class CalendarViewModel : NavigationModel
             return;
         }
         var listBoxSelectedItem = BigPanels.FirstOrDefault(predicate: m => m.Date.Day == _selectedMemo.Date.Day && m.Date.Month == _selectedMemo.Date.Month);
+        // ReSharper disable once NullableWarningSuppressionIsUsed
         _listBox!.SelectedItem = listBoxSelectedItem;
         _selectedMemo = listBoxSelectedItem;
         Aggregator.UpdateLoadingStatus(false);
@@ -182,5 +181,13 @@ public class CalendarViewModel : NavigationModel
             result.Add(new MemoModel(active, d, null, _mapper));
         }
         return result;
+    }
+
+    #endregion
+
+    public override void OnNavigatedTo(NavigationContext navigationContext)
+    {
+        base.OnNavigatedTo(navigationContext);
+        RefreshCalendarByMonth(_selectedMemo?.Date ?? DateTime.Now);
     }
 }

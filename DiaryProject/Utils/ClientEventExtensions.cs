@@ -20,6 +20,9 @@ public static class ClientEventExtensions
         aggregator.GetEvent<EditorUpdated>().Publish(new EditorStartedModel { Memos = memos, EditedDate = editedDate});
     }
 
+    /// <summary>
+    /// Set if the editor is enabled and can be accessed by the user
+    /// </summary>
     public static void UpdateEditorStatus(this IEventAggregator aggregator, bool isEnabled)
     {
         aggregator.GetEvent<EditorNavigationChanged>().Publish(new EditorStatusModel { IsEnabled = isEnabled });
@@ -34,11 +37,6 @@ public static class ClientEventExtensions
     {
         aggregator.GetEvent<PageNavigatedTo>().Publish(context);
     }
-
-    /*public static void ChangeTimerStatus(this IEventAggregator aggregator, int id, bool status)
-    {
-        aggregator.GetEvent<TimerStatusChanged>().Publish(new TimerStatusChangedModel { Id = id, Status = status });
-    }*/
 
     public static void ChangeUserStatus(this IEventAggregator aggregator, UserOperation operation, string token)
     {
