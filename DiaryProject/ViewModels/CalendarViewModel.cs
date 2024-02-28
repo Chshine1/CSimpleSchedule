@@ -144,7 +144,7 @@ public class CalendarViewModel : NavigationModel
             Aggregator.UpdateLoadingStatus(false);
             return;
         }
-        var listBoxSelectedItem = BigPanels.FirstOrDefault(predicate: m => m.Date.Day == _selectedMemo.Date.Day);
+        var listBoxSelectedItem = BigPanels.FirstOrDefault(predicate: m => m.Date.Day == _selectedMemo.Date.Day && m.Date.Month == _selectedMemo.Date.Month);
         _listBox!.SelectedItem = listBoxSelectedItem;
         _selectedMemo = listBoxSelectedItem;
         Aggregator.UpdateLoadingStatus(false);
