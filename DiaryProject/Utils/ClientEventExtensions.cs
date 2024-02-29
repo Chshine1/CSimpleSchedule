@@ -38,7 +38,7 @@ public static class ClientEventExtensions
         aggregator.GetEvent<PageNavigatedTo>().Publish(context);
     }
 
-    public static void ChangeUserStatus(this IEventAggregator aggregator, UserOperation operation, string token)
+    public static void UpdateUserStatus(this IEventAggregator aggregator, UserOperation operation, string token)
     {
         aggregator.GetEvent<AccountEvent>().Publish(new AccountModel { Operation = operation, Token = token });
     }

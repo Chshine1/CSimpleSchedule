@@ -23,21 +23,11 @@ public class ApiResponse
 
 public class ApiResponse<T>
 {
-    /*public ApiResponse(string message, bool status = false)
-    {
-        Message = message;
-        Status = status;
-    }
-
-    public ApiResponse(bool status, T result)
-    {
-        Status = status;
-        Result = result;
-    }*/
+    public bool Connected { get; init; } = true;
     
-    public string? Message { get; set; }
+    public string? Message { get; init; }
     
-    public bool Status { get; set; }
+    public bool Status { get; init; }
     
-    public T? Result { get; set; }
+    public T? Result { get; init; }
 }

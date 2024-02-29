@@ -18,11 +18,7 @@ public class HttpRestClient
         _restClient = new RestClient(option);
     }
     
-    /// <summary>
-    /// Execute the given http request
-    /// </summary>
-    /// <returns>An api response</returns>
-    public async Task<ApiResponse> ExecuteAsync(BaseRequest baseRequest)
+    /*public async Task<ApiResponse> ExecuteAsync(BaseRequest baseRequest)
     {
         var request = new RestRequest(baseRequest.Route, baseRequest.Method);
         request.AddHeader("Content-Type", baseRequest.ContentType);
@@ -35,7 +31,7 @@ public class HttpRestClient
         var response = await _restClient.ExecuteAsync(request);
         if (response.Content == null) throw new HttpRequestException("Null response content");
         return JsonConvert.DeserializeObject<ApiResponse>(response.Content)!;
-    }
+    }*/
 
     /// <summary>
     /// Execute the given http request
@@ -53,6 +49,7 @@ public class HttpRestClient
                 request.AddParameter("application/json", JsonConvert.SerializeObject(baseRequest.Parameter),
                     ParameterType.RequestBody);
             }
+
             if (App.IsUserRegistered && App.UserToken != null) request.AddHeader("auth", App.UserToken);
 
             var response = await _restClient.ExecuteAsync(request);
@@ -60,7 +57,7 @@ public class HttpRestClient
         }
         catch (Exception e)
         {
-            return new ApiResponse<T> { Status = false, Message = e.Message };
+            return new ApiResponse<T> { Status = false, Message = e.Message, Connected = false };
         }
     }
 }

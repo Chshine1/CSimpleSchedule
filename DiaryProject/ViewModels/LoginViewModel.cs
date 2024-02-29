@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 using DiaryProject.Events;
@@ -5,80 +6,102 @@ using DiaryProject.Models;
 using DiaryProject.Service;
 using DiaryProject.Service.Local;
 using DiaryProject.Service.Web;
-using DiaryProject.Shared.Contact;
-using DiaryProject.Shared.Dtos;
-using DiaryProject.Shared.Parameters;
 using DiaryProject.Utils;
 
 namespace DiaryProject.ViewModels;
 
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class LoginViewModel : NavigationModel
 {
     private readonly IUserService _userService;
     private readonly IMemoLocalRepository _memoRepository;
-    private readonly TimerService _timerService;
     private readonly IMapper _mapper;
-    private readonly IMemoService _memoService;
-    
+    private readonly TimerService _timerService;
+
+    #region BoundProperties
+
     public string UserName { get; set; }
     public string Password { get; set; }
+    public string FailureStatus { get; set; }
 
     public DelegateCommand LoginCommand { get; private init; }
-
     public DelegateCommand LocalModeCommand { get; private init; }
+    public DelegateCommand GotFocusCommand { get; private init; }
 
-    public LoginViewModel(IMemoLocalRepository memoRepository, TimerService timerService, IMapper mapper, IRegionManager regionManager, IUserService userService, IEventAggregator aggregator, IMemoService memoService) : base(aggregator)
+    #endregion
+
+    public LoginViewModel(IUserService userService, IEventAggregator aggregator, IMemoLocalRepository memoRepository, IMapper mapper, TimerService timerService) : base(aggregator)
     {
-        _memoRepository = memoRepository;
-        _timerService = timerService;
-        _mapper = mapper;
         _userService = userService;
-        _memoService = memoService;
+        _memoRepository = memoRepository;
+        _mapper = mapper;
+        _timerService = timerService;
+
         UserName = "";
         Password = "";
+        FailureStatus = "";
+        
         LoginCommand = new DelegateCommand(Login);
         LocalModeCommand = new DelegateCommand(() =>
         {
             App.IsUserRegistered = false;
-            Aggregator.ChangeUserStatus(UserOperation.LocalMode, string.Empty);
-            RegisterTimers(_memoRepository, _timerService, _mapper);
+            Aggregator.UpdateUserStatus(UserOperation.LocalMode, string.Empty);
+            Initialize();
+        });
+        GotFocusCommand = new DelegateCommand(() =>
+        {
+            FailureStatus = string.Empty;
+            RaisePropertyChanged(nameof(FailureStatus));
         });
     }
+
+    #region PrivateMethods
 
     private async void Login()
     {
         Aggregator.UpdateLoadingStatus(true);
+        
         var loginResult = await _userService.LoginAsync(UserName, Password);
         if (!loginResult.Status)
         {
+            FailureStatus = loginResult.Connected ? "*用户名或密码错误" : "*未连接到服务器，请考虑使用本地模式";
+            RaisePropertyChanged(nameof(FailureStatus));
             Aggregator.UpdateLoadingStatus(false);
             return;
         }
+        FailureStatus = string.Empty;
+        RaisePropertyChanged(nameof(FailureStatus));
+        
         App.IsUserRegistered = true;
         App.UserToken = loginResult.Result;
-        var sycThread = new Thread(SynchronizingWithServer);
-        sycThread.Start();
-        Aggregator.ChangeUserStatus(UserOperation.SuccessfullyLogin, loginResult.Result);
-        RegisterTimers(_memoRepository, _timerService, _mapper);
+        
+        Debug.Assert(loginResult.Result != null, "loginResult.Result != null");
+        Aggregator.UpdateUserStatus(UserOperation.SuccessfullyLogin, loginResult.Result);
+        
+        Initialize();
+        
         Aggregator.UpdateLoadingStatus(false);
     }
 
-    private async void RegisterTimers(IMemoLocalRepository memoRepository, TimerService timerService, IMapper mapper)
+    private async void Initialize()
     {
-        var query = (await memoRepository.GetAllAsync()).Result;
+        /* TODO:Configure local database */
+        var query = (await _memoRepository.GetAllAsync()).Result;
         if (query == null) return;
-        var waitList = (from memo in query select mapper.Map<MemoRecord>(memo)).ToArray();
+        var waitList = (from memo in query select _mapper.Map<MemoRecord>(memo)).ToArray();
         if (waitList.Length == 0) return;
         
         foreach (var memo in waitList)
         {
-            timerService.RegisterToTimers(memo);
+            _timerService.RegisterToTimers(memo);
         }
     }
+    
+    /* TODO:The following methods should be in somewhere else */
 
-    private async void SynchronizingWithServer()
+    /*private async void SynchronizingWithServer()
     {
         var logs = await _memoRepository.GetLogs();
         foreach (var log in logs)
@@ -113,5 +136,7 @@ public class LoginViewModel : NavigationModel
                 Console.WriteLine(e);
             }
         }
-    }
+    }*/
+
+    #endregion
 }
