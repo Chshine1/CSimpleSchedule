@@ -1,5 +1,4 @@
 using DiaryProject.Shared.Dtos;
-using DiaryProject.Shared.Parameters;
 
 namespace DiaryProject.Service.Local;
 

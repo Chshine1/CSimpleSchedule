@@ -1,6 +1,5 @@
 using System.IO;
 using DiaryProject.Service.Web;
-using DiaryProject.Shared;
 using DiaryProject.Shared.Contact;
 using DiaryProject.Shared.Dtos;
 using DiaryProject.Shared.Parameters;
@@ -17,6 +16,7 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
     {
         if (!Directory.Exists(dbPath)) Directory.CreateDirectory(dbPath);
         dbPath += "\\save.db";
+        
         _connection = new SQLiteAsyncConnection(dbPath);
         _connection.CreateTableAsync<TEntity>();
         _connection.CreateTableAsync<DatabaseLogDto>();
@@ -27,7 +27,7 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
         try
         {
             await _connection.InsertAsync(entity);
-            if (log) await AddLogEntry(entity.Id, DatabaseOperation.Add);
+            if (log) await WriteLogEntry(entity.Id, DatabaseOperation.Add);
             return new LocalResponse<TEntity> { Status = true, Result = entity };
         }
         catch (Exception e)
@@ -42,8 +42,9 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
         {
             var target = await _connection.GetAsync<TEntity>(predicate: e => e.Id.Equals(entity.Id));
             target.CopyFrom(entity);
+            
             await _connection.UpdateAsync(target, typeof(TEntity));
-            if (log) await AddLogEntry(target.Id, DatabaseOperation.Update);
+            if (log) await WriteLogEntry(target.Id, DatabaseOperation.Update);
             return new LocalResponse<TEntity> { Status = true, Result = target };
         }
         catch (InvalidOperationException)
@@ -61,8 +62,9 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
         try
         {
             var entity = await _connection.GetAsync<TEntity>(predicate: e => e.Id.Equals(id));
+            
             await _connection.DeleteAsync<TEntity>(id);
-            if (log) await AddLogEntry(id, DatabaseOperation.Delete);
+            if (log) await WriteLogEntry(id, DatabaseOperation.Delete);
             return new LocalResponse<TEntity> { Status = true, Result = entity };
         }
         catch (Exception e)
@@ -96,8 +98,44 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
             return new LocalResponse<List<TEntity>> { Status = false, Message = e.Message };
         }
     }
+    
+    public async void UpdateChanges(IBaseService<TEntity, MemoParameter> webService)
+    {
+        var logs = await _connection.QueryAsync<DatabaseLogDto>("SELECT * FROM logs ORDER BY UpdateTime asc");
+        foreach (var log in logs)
+        {
+            switch (log.Operation)
+            {
+                case 0:
+                    await webService.AddAsync(await _connection.FindAsync<TEntity>(log.EntityId));
+                    break;
+                case 1:
+                    await webService.UpdateAsync(await _connection.FindAsync<TEntity>(log.EntityId));
+                    break;
+                case 2:
+                    await webService.DeleteAsync(log.EntityId);
+                    break;
+                default:
+                    continue;
+            }
+        }
+        await _connection.ExecuteAsync("DELETE FROM logs");
+        await _connection.ExecuteAsync("UPDATE sqlite_sequence SET seq=1 WHERE name=\"logs\"");
+    }
 
-    private async Task AddLogEntry(int entityId, DatabaseOperation operation)
+    //TODO:
+    public int GetVersion()
+    {
+        return 0;
+    }
+
+    /// <summary>
+    /// Write to log when an operation is done to an entity
+    /// </summary>
+    /// <param name="entityId">The id of the entity operated</param>
+    /// <param name="operation">The kind of the operation</param>
+    /// <exception cref="ArgumentOutOfRangeException">Unidentified operation</exception>
+    private async Task WriteLogEntry(int entityId, DatabaseOperation operation)
     {
         DatabaseLogDto? log = null;
         try
@@ -136,40 +174,5 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
         }
         log.UpdateTime = DateTime.Now;
         await _connection.UpdateAsync(log);
-    }
-
-    public async void UpdateChanges(IBaseService<TEntity, MemoParameter> webService)
-    {
-        var logs = await _connection.QueryAsync<DatabaseLogDto>("SELECT * FROM logs ORDER BY UpdateTime asc");
-        foreach (var log in logs)
-        {
-            switch (log.Operation)
-            {
-                case 0:
-                    await webService.AddAsync(await _connection.FindAsync<TEntity>(log.EntityId));
-                    break;
-                case 1:
-                    await webService.UpdateAsync(await _connection.FindAsync<TEntity>(log.EntityId));
-                    break;
-                case 2:
-                    await webService.DeleteAsync(log.EntityId);
-                    break;
-                default:
-                    continue;
-            }
-        }
-        DropLogsDatabase();
-    }
-
-    public async void DropLogsDatabase()
-    {
-        await _connection.ExecuteAsync("DELETE FROM logs");
-        await _connection.ExecuteAsync("UPDATE sqlite_sequence SET seq=1 WHERE name=\"logs\"");
-    }
-
-    //TODO:
-    public int GetVersion()
-    {
-        return 0;
     }
 }
