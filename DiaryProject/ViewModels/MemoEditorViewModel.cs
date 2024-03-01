@@ -89,14 +89,14 @@ public class MemoEditorViewModel : NavigationModel
             _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
 #else
             _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
-            if (App.IsUserRegistered) _memoService.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
+            if (App.IsSynchronizing) _memoService.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
 
 #endif
         });
         DeleteSpecific = new DelegateCommand<EditableMemoModel>(e =>
         {
             _memoRepository.DeleteAsync(e.Memo.Id);
-            if (App.IsUserRegistered) _memoService.DeleteAsync(e.Memo.Id);
+            if (App.IsSynchronizing) _memoService.DeleteAsync(e.Memo.Id);
             MemoModels.Remove(e);
         });
     }
@@ -109,7 +109,7 @@ public class MemoEditorViewModel : NavigationModel
         await _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(memo.Memo));
 #else
         await _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(memo.Memo));
-        if (App.IsUserRegistered) await _memoService.UpdateAsync(_mapper.Map<MemoDto>(memo.Memo));
+        if (App.IsSynchronizing) await _memoService.UpdateAsync(_mapper.Map<MemoDto>(memo.Memo));
 #endif
         _timerService.RegisterToTimers(memo.Memo);
     }
@@ -144,7 +144,7 @@ public class MemoEditorViewModel : NavigationModel
             EndTime = t.AddMinutes(1)
         };
         var result = await _memoRepository.AddAsync(memoDto);
-        if (App.IsUserRegistered) await _memoService.AddAsync(memoDto);
+        if (App.IsSynchronizing) await _memoService.AddAsync(memoDto);
 #endif        
         var memoRecord = _mapper.Map<MemoRecord>(result.Result);
         _timerService.RegisterToTimers(memoRecord);

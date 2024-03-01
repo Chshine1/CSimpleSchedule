@@ -17,6 +17,8 @@ public partial class App : PrismApplication
 {
     public static bool IsUserRegistered { get; set; }
 
+    public static bool IsSynchronizing { get; set; }
+
     public static string? UserToken { get; set; }
 
     protected override void RegisterTypes(IContainerRegistry containerRegistry)

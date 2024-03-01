@@ -1,7 +1,9 @@
 using System.IO;
+using DiaryProject.Service.Web;
 using DiaryProject.Shared;
 using DiaryProject.Shared.Contact;
 using DiaryProject.Shared.Dtos;
+using DiaryProject.Shared.Parameters;
 using DiaryProject.Shared.Utils;
 using SQLite;
 
@@ -137,14 +139,38 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
         await _connection.UpdateAsync(log);
     }
 
+    public async void UpdateChanges(IBaseService<TEntity, MemoParameter> webService)
+    {
+        var logs = await _connection.QueryAsync<DatabaseLogDto>("SELECT * FROM logs ORDER BY UpdateTime asc");
+        foreach (var log in logs)
+        {
+            switch (log.Operation)
+            {
+                case 0:
+                    await webService.AddAsync(await _connection.FindAsync<TEntity>(log.EntityId));
+                    break;
+                case 1:
+                    await webService.UpdateAsync(await _connection.FindAsync<TEntity>(log.EntityId));
+                    break;
+                case 2:
+                    await webService.DeleteAsync(log.EntityId);
+                    break;
+                default:
+                    continue;
+            }
+        }
+        DropLogsDatabase();
+    }
+
     public async void DropLogsDatabase()
     {
         await _connection.ExecuteAsync("DELETE FROM logs");
         await _connection.ExecuteAsync("UPDATE sqlite_sequence SET seq=1 WHERE name=\"logs\"");
     }
 
-    public async Task<List<DatabaseLogDto>> GetLogs()
+    //TODO:
+    public int GetVersion()
     {
-        return await _connection.QueryAsync<DatabaseLogDto>("SELECT * FROM logs ORDER BY UpdateTime");
+        return 0;
     }
 }

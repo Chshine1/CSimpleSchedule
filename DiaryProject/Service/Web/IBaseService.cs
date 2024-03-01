@@ -18,4 +18,6 @@ public interface IBaseService<TEntity, in TParameter> where TEntity : class
     Task<ApiResponse<TEntity>> GetFirstOrDefaultAsync(int id);
 
     Task<ApiResponse<IList<TEntity>>> GetAllAsync(TParameter parameter);
+    
+    int GetVersion();
 }

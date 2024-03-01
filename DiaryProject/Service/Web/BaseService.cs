@@ -67,4 +67,10 @@ public class BaseService<TEntity, TParameter> : IBaseService<TEntity, TParameter
         };
         return await _client.ExecuteAsync<IList<TEntity>>(request);
     }
+
+    //TODO
+    public int GetVersion()
+    {
+        return 0;
+    }
 }

@@ -107,7 +107,7 @@ public class CalendarViewModel : NavigationModel
 #else
                 _memoRepository.DeleteAsync(id);
                 timerService.DropTracing(id);
-                if (App.IsUserRegistered) memoService.DeleteAsync(id);
+                if (App.IsSynchronizing) memoService.DeleteAsync(id);
 #endif
             }
 

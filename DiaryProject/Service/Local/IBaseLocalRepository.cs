@@ -1,5 +1,7 @@
+using DiaryProject.Service.Web;
 using DiaryProject.Shared.Contact;
 using DiaryProject.Shared.Dtos;
+using DiaryProject.Shared.Parameters;
 
 namespace DiaryProject.Service.Local;
 
@@ -15,7 +17,9 @@ public interface IBaseLocalRepository<TEntity> where TEntity : class
 
     Task<LocalResponse<List<TEntity>>> GetAllAsync();
 
-    void DropLogsDatabase();
+    void UpdateChanges(IBaseService<TEntity, MemoParameter> webService);
 
-    Task<List<DatabaseLogDto>> GetLogs();
+    void DropLogsDatabase();
+    
+    int GetVersion();
 }

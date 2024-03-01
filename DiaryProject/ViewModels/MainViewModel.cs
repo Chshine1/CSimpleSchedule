@@ -73,7 +73,7 @@ public class MainViewModel : BindableBase
         _idsInSchedule = new List<int>();
         aggregator.GetEvent<LoadingStatusChanged>().Subscribe(arg =>
         {
-            IsLoading = arg.IsOpen;
+            //IsLoading = arg.IsOpen;
         });
         aggregator.GetEvent<EditorNavigationChanged>().Subscribe(arg =>
         {
@@ -97,8 +97,6 @@ public class MainViewModel : BindableBase
             if (arg.Operation == UserOperation.ExitAccount)
             {
                 MenuItemModels[0].IsUserRegistered = false;
-                App.IsUserRegistered = false;
-                App.UserToken = string.Empty;
                 MenuItemModels[1].IsPageEnabled = false;
                 _regionManager.Regions["MainPanel"].RequestNavigate(nameof(LoginView));
                 return;

@@ -47,6 +47,7 @@ public class LoginViewModel : NavigationModel
         LocalModeCommand = new DelegateCommand(() =>
         {
             App.IsUserRegistered = false;
+            App.IsSynchronizing = false;
             Aggregator.UpdateUserStatus(UserOperation.LocalMode, string.Empty);
             Initialize();
         });
@@ -75,6 +76,7 @@ public class LoginViewModel : NavigationModel
         RaisePropertyChanged(nameof(FailureStatus));
         
         App.IsUserRegistered = true;
+        App.IsSynchronizing = true;
         App.UserToken = loginResult.Result;
         
         Debug.Assert(loginResult.Result != null, "loginResult.Result != null");
