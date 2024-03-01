@@ -25,9 +25,10 @@ public partial class MainView : Window
             MenuBarCommand.IsEnabled = false;
             MenuBar.SelectedItem = arg.Uri.OriginalString switch
             {
-                "LoginView" => MenuBar.Items[0],
-                "CalendarView" => MenuBar.Items[1],
-                "MemoEditorView" => MenuBar.Items[2],
+                nameof(LoginView) => MenuBar.Items[0],
+                nameof(UserView) => MenuBar.Items[0],
+                nameof(CalendarView) => MenuBar.Items[1],
+                nameof(MemoEditorView) => MenuBar.Items[2],
                 _ => MenuBar.SelectedItem
             };
             MenuBarCommand.IsEnabled = true;

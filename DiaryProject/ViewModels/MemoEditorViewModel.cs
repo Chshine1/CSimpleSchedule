@@ -3,7 +3,6 @@
 
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Windows.Controls;
 using System.Windows.Documents;
 using AutoMapper;
 using DiaryProject.Events;
@@ -19,6 +18,8 @@ using RichTextBox = System.Windows.Controls.RichTextBox;
 namespace DiaryProject.ViewModels;
 
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class MemoEditorViewModel : NavigationModel
 {
     private readonly IMemoService _memoService;
@@ -26,12 +27,12 @@ public class MemoEditorViewModel : NavigationModel
     private readonly IMemoLocalRepository _memoRepository;
     private readonly TimerService _timerService;
 
-    private DateTime _editedTime;
+    #region BoundProperties
 
+    private DateTime _editedTime;
     public string DateString => TimeProcessor.GetCalendarTitleDate(_editedTime);
     
     private ObservableCollection<EditableMemoModel> _memoModels;
-
     public ObservableCollection<EditableMemoModel> MemoModels
     {
         get => _memoModels;
@@ -42,10 +43,12 @@ public class MemoEditorViewModel : NavigationModel
         }
     }
 
-    public DelegateCommand<EditableMemoModel> ContentUpdateCommand { get; set; }
-    public DelegateCommand<EditableMemoModel> DeleteSpecific { get; set; }
-    public DelegateCommand AddMemoCommand { get; set; }
-    public DelegateCommand<RichTextBox> ConfirmContentInput { get; set; }
+    public DelegateCommand<EditableMemoModel> ContentUpdateCommand { get; private init; }
+    public DelegateCommand<EditableMemoModel> DeleteSpecific { get; private init; }
+    public DelegateCommand AddMemoCommand { get; private init; }
+    public DelegateCommand<RichTextBox> ConfirmContentInput { get; private init; }
+
+    #endregion
 
     public MemoEditorViewModel(IEventAggregator aggregator, IMemoService memoService, IMapper mapper, IMemoLocalRepository memoRepository, TimerService timerService) : base(aggregator)
     {
@@ -53,6 +56,9 @@ public class MemoEditorViewModel : NavigationModel
         _mapper = mapper;
         _memoRepository = memoRepository;
         _timerService = timerService;
+        
+        _memoModels = new ObservableCollection<EditableMemoModel>();
+        
         Aggregator.GetEvent<EditorUpdated>().Subscribe(arg =>
         {
             var memos = new ObservableCollection<EditableMemoModel>();
@@ -67,23 +73,24 @@ public class MemoEditorViewModel : NavigationModel
         // 改变备忘录的视觉表现状态
         Aggregator.GetEvent<TimerStatusChanged>().Subscribe(arg =>
         {
-            var memo = _memoModels.FirstOrDefault(predicate: m => m.Memo.Id.Equals(arg.Id));
+            var memo = MemoModels.FirstOrDefault(predicate: m => m.Memo.Id.Equals(arg.Id));
             if (memo == null) return;
             memo.Status = arg.Status;
         });
-        _memoModels = new ObservableCollection<EditableMemoModel>();
+        
         ContentUpdateCommand = new DelegateCommand<EditableMemoModel>(UpdateMemo);
-        AddMemoCommand = new DelegateCommand(AddMemoAtPosition);
+        AddMemoCommand = new DelegateCommand(AddMemo);
         ConfirmContentInput = new DelegateCommand<RichTextBox>(textBox =>
         {
             var content = new TextRange(textBox.Document.ContentStart, textBox.Document.ContentEnd).Text;
-            var context = textBox.Document.DataContext as EditableMemoModel;
+            if (textBox.Document.DataContext is not EditableMemoModel context) return;
             context.Memo.Content = content;
 #if LOCAL
             _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
 #else
             _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
             if (App.IsUserRegistered) _memoService.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
+
 #endif
         });
         DeleteSpecific = new DelegateCommand<EditableMemoModel>(e =>
@@ -93,7 +100,9 @@ public class MemoEditorViewModel : NavigationModel
             MemoModels.Remove(e);
         });
     }
-    
+
+    #region PrivateMethods
+
     private async void UpdateMemo(EditableMemoModel memo)
     {
 #if LOCAL
@@ -105,27 +114,9 @@ public class MemoEditorViewModel : NavigationModel
         _timerService.RegisterToTimers(memo.Memo);
     }
 
-    private async void AddMemoAtPosition()
+    private async void AddMemo()
     {
         Aggregator.UpdateLoadingStatus(true);
-        /*var latterMemos = from memo in _memoModels where memo.Memo.Order >= position select memo.Memo;
-        foreach (var memo in latterMemos)
-        {
-#if LOCAL
-            var changeModel = (await _memoRepository.GetFirstOrDefaultAsync(memo.Id)).Result;
-#else
-            var changeModel = (await _memoRepository.GetFirstOrDefaultAsync(memo.Id)).Result;
-            //var changeModel = (await _memoService.GetFirstOrDefaultAsync(memo.Id)).Result;
-#endif
-            if (changeModel == null) continue;
-            changeModel.Order += 1;
-#if LOCAL
-            await _memoRepository.UpdateAsync(changeModel);
-#else
-            await _memoRepository.UpdateAsync(changeModel);
-            if (App.IsUserRegistered) await _memoService.UpdateAsync(changeModel);
-#endif
-        }*/
         var t = _editedTime.Date == DateTime.Today ? DateTime.Now : _editedTime;
         if (t is { Hour: 23, Minute: 59 }) t = t.AddMinutes(-1);
 #if LOCAL
@@ -160,6 +151,8 @@ public class MemoEditorViewModel : NavigationModel
         _memoModels.Insert(_memoModels.Count, new EditableMemoModel(memoRecord));
         Aggregator.UpdateLoadingStatus(false);
     }
+
+    #endregion
 
     public override void OnNavigatedTo(NavigationContext navigationContext)
     {

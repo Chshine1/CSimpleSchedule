@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using DiaryProject.Views;
 
 namespace DiaryProject.Models;
 
@@ -12,7 +13,7 @@ public class MenuItemModel : INotifyPropertyChanged
 {
     public string Icon { get; set; } = null!;
 
-    public string TargetName { get; init; } = null!;
+    public string TargetName { get; set; } = null!;
 
     public bool IsAccount { get; init; }
 
@@ -38,6 +39,7 @@ public class MenuItemModel : INotifyPropertyChanged
         set
         {
             _isUserRegistered = value;
+            TargetName = _isUserRegistered ? nameof(UserView) : nameof(LoginView);
             OnPropertyChanged(nameof(IconColor));
         }
     }

@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:DiaryProject.Views"
              mc:Ignorable="d"
              d:DesignHeight="728" d:DesignWidth="970">
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <TextBlock Text="{Binding UserName}" FontSize="20" />
+    <StackPanel Width="970" Height="728" Background="{StaticResource White4}">
+        <Button Margin="0,60" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Content="退出登录"
+                Command="{Binding LogoutCommand}"/>
     </StackPanel>
 </UserControl>

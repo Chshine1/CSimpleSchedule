@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using DiaryProject.Events;
@@ -58,18 +59,8 @@ public class MainViewModel : BindableBase
             RaisePropertyChanged();
         }
     }
-    
-    private ObservableCollection<MenuItemModel> _menuItemModels; // Models of the page selection buttons
 
-    public ObservableCollection<MenuItemModel> MenuItemModels
-    {
-        get => _menuItemModels;
-        set
-        {
-            _menuItemModels = value;
-            RaisePropertyChanged();
-        }
-    }
+    public ObservableCollection<MenuItemModel> MenuItemModels { get; }
 
     public DelegateCommand<MenuItemModel> NavigateCommand { get; private set; }
     public DelegateCommand CalendarNext { get; private set; }
@@ -86,7 +77,7 @@ public class MainViewModel : BindableBase
         });
         aggregator.GetEvent<EditorNavigationChanged>().Subscribe(arg =>
         {
-            _menuItemModels![2].IsPageEnabled = arg.IsEnabled;
+            MenuItemModels![2].IsPageEnabled = arg.IsEnabled;
         });
         aggregator.GetEvent<TimerStatusChanged>().Subscribe(arg =>
         {
@@ -101,10 +92,19 @@ public class MainViewModel : BindableBase
         });
         aggregator.GetEvent<AccountEvent>().Subscribe(arg =>
         {
-            _menuItemModels[0].IsUserRegistered = arg.Operation == UserOperation.SuccessfullyLogin;
-            if (arg.Operation == UserOperation.ExitAccount) return;
-            _regionManager.Regions["MainPanel"].RequestNavigate(nameof(CalendarView));
-            _menuItemModels[1].IsPageEnabled = true;
+            Debug.Assert(MenuItemModels != null, nameof(MenuItemModels) + " != null");
+            MenuItemModels[0].IsUserRegistered = arg.Operation == UserOperation.SuccessfullyLogin;
+            if (arg.Operation == UserOperation.ExitAccount)
+            {
+                MenuItemModels[0].IsUserRegistered = false;
+                App.IsUserRegistered = false;
+                App.UserToken = string.Empty;
+                MenuItemModels[1].IsPageEnabled = false;
+                _regionManager.Regions["MainPanel"].RequestNavigate(nameof(LoginView));
+                return;
+            }
+            _regionManager.Regions["MainPanel"].RequestNavigate(arg.Operation == UserOperation.SuccessfullyLogin ? nameof(UserView) : nameof(CalendarView));
+            MenuItemModels[1].IsPageEnabled = true;
         });
         
         NavigateCommand = new DelegateCommand<MenuItemModel>(Navigate);
@@ -113,7 +113,7 @@ public class MainViewModel : BindableBase
         
         _dateModels = GetDatesPanels(TimeProcessor.GetMonthCalendar(DateTime.Now));
 
-        _menuItemModels = new ObservableCollection<MenuItemModel>
+        MenuItemModels = new ObservableCollection<MenuItemModel>
         {
             new() { Icon = "AccountCircle", TargetName = nameof(LoginView), IsPageEnabled = true, IsAccount = true, ToolTipText = "用户"},
             new() { Icon = "CalendarMonth", TargetName = nameof(CalendarView), IsPageEnabled = false, IsAccount = false, ToolTipText = "日历"},
