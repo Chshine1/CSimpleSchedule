@@ -19,8 +19,10 @@ namespace DiaryProject.ViewModels;
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public class CalendarViewModel : NavigationModel
 {
+    private readonly IMemoService _memoService;
     private readonly IMapper _mapper;
     private readonly IMemoLocalRepository _memoRepository;
+    private readonly TimerService _timerService;
 
     /// <summary>
     /// The ListBox used for exhibiting the memos
@@ -84,8 +86,10 @@ public class CalendarViewModel : NavigationModel
 
     public CalendarViewModel(IMemoService memoService, IEventAggregator aggregator, IMapper mapper, IRegionManager regionManager, IMemoLocalRepository memoRepository, TimerService timerService) : base(aggregator)
     {
+        _memoService = memoService;
         _mapper = mapper;
         _memoRepository = memoRepository;
+        _timerService = timerService;
         
         SelectCommand = new DelegateCommand<ListBox>(m => { _listBox = m; });
         NextPage = new DelegateCommand(() => { RefreshCalendarByMonth(CurrentPage.NextMonth()); });
@@ -93,26 +97,7 @@ public class CalendarViewModel : NavigationModel
         ExpandEditor = new DelegateCommand(() => { regionManager.Regions["MainPanel"].RequestNavigate("MemoEditorView"); });
         LocateToToday = new DelegateCommand(() => { RefreshCalendarByMonth(DateTime.Today); });
         LocateToSelected = new DelegateCommand(() => { if (_selectedMemo != null) RefreshCalendarByMonth(_selectedMemo.Date); });
-        ClearSelected = new DelegateCommand(() =>
-        {
-            if (_selectedMemo == null) return;
-            
-            /* TODO:popup confirm dialog */
-            var memos = _selectedMemo.GetMemoIndices();
-            foreach (var id in memos)
-            {
-#if LOCAL
-                _memoRepository.DeleteAsync(id);
-                _timerService.DropTracing(id);
-#else
-                _memoRepository.DeleteAsync(id);
-                timerService.DropTracing(id);
-                if (App.IsSynchronizing) memoService.DeleteAsync(id);
-#endif
-            }
-
-            _selectedMemo?.Clear();
-        });
+        ClearSelected = new DelegateCommand(Clear);
         
         // Called when the editor tells this to send the current selected day for editing
         Aggregator.GetEvent<ActionNotified>().Subscribe(n =>
@@ -127,6 +112,30 @@ public class CalendarViewModel : NavigationModel
     }
 
     #region PrivateMethods
+
+    private async void Clear()
+    {
+        if (_selectedMemo == null) return;
+            
+        /* TODO:popup confirm dialog */
+        var memos = _selectedMemo.GetMemoIndices();
+        foreach (var id in memos)
+        {
+#if LOCAL
+                _memoRepository.DeleteAsync(id);
+                _timerService.DropTracing(id);
+#else
+            if (App.IsSynchronizing)
+            {
+                var response = await _memoService.DeleteAsync(id);
+                App.IsSynchronizing = response.Connected;
+            }
+            await _memoRepository.DeleteAsync(id, App.IsSynchronizing);
+            _timerService.DropTracing(id);
+#endif
+        }
+        _selectedMemo?.Clear();
+    }
 
     /// <summary>
     /// Switch to one month and refresh the contents in the calendar 

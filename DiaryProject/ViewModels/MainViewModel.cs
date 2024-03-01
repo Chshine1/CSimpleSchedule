@@ -98,6 +98,7 @@ public class MainViewModel : BindableBase
             {
                 MenuItemModels[0].IsUserRegistered = false;
                 MenuItemModels[1].IsPageEnabled = false;
+                MenuItemModels[2].IsPageEnabled = false;
                 _regionManager.Regions["MainPanel"].RequestNavigate(nameof(LoginView));
                 return;
             }

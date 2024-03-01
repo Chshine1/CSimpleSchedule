@@ -22,12 +22,12 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
         _connection.CreateTableAsync<DatabaseLogDto>();
     }
     
-    public async Task<LocalResponse<TEntity>> AddAsync(TEntity entity)
+    public async Task<LocalResponse<TEntity>> AddAsync(TEntity entity, bool log)
     {
         try
         {
             await _connection.InsertAsync(entity);
-            await AddLogEntry(entity.Id, DatabaseOperation.Add);
+            if (log) await AddLogEntry(entity.Id, DatabaseOperation.Add);
             return new LocalResponse<TEntity> { Status = true, Result = entity };
         }
         catch (Exception e)
@@ -36,20 +36,19 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
         }
     }
 
-    public async Task<LocalResponse<TEntity>> UpdateAsync(TEntity entity)
+    public async Task<LocalResponse<TEntity>> UpdateAsync(TEntity entity, bool log)
     {
-        //if (_connection == null) return new LocalResponse<TEntity> { Status = false, Message = "Missing database" };
         try
         {
             var target = await _connection.GetAsync<TEntity>(predicate: e => e.Id.Equals(entity.Id));
             target.CopyFrom(entity);
             await _connection.UpdateAsync(target, typeof(TEntity));
-            await AddLogEntry(entity.Id, DatabaseOperation.Update);
+            if (log) await AddLogEntry(target.Id, DatabaseOperation.Update);
             return new LocalResponse<TEntity> { Status = true, Result = target };
         }
         catch (InvalidOperationException)
         {
-            return await AddAsync(entity);
+            return await AddAsync(entity, log);
         }
         catch (Exception e)
         {
@@ -57,13 +56,13 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
         }
     }
 
-    public async Task<LocalResponse<TEntity>> DeleteAsync(int id)
+    public async Task<LocalResponse<TEntity>> DeleteAsync(int id, bool log)
     {
         try
         {
             var entity = await _connection.GetAsync<TEntity>(predicate: e => e.Id.Equals(id));
             await _connection.DeleteAsync<TEntity>(id);
-            await AddLogEntry(id, DatabaseOperation.Delete);
+            if (log) await AddLogEntry(id, DatabaseOperation.Delete);
             return new LocalResponse<TEntity> { Status = true, Result = entity };
         }
         catch (Exception e)

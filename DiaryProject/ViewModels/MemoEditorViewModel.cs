@@ -80,25 +80,8 @@ public class MemoEditorViewModel : NavigationModel
         
         ContentUpdateCommand = new DelegateCommand<EditableMemoModel>(UpdateMemo);
         AddMemoCommand = new DelegateCommand(AddMemo);
-        ConfirmContentInput = new DelegateCommand<RichTextBox>(textBox =>
-        {
-            var content = new TextRange(textBox.Document.ContentStart, textBox.Document.ContentEnd).Text;
-            if (textBox.Document.DataContext is not EditableMemoModel context) return;
-            context.Memo.Content = content;
-#if LOCAL
-            _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
-#else
-            _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
-            if (App.IsSynchronizing) _memoService.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
-
-#endif
-        });
-        DeleteSpecific = new DelegateCommand<EditableMemoModel>(e =>
-        {
-            _memoRepository.DeleteAsync(e.Memo.Id);
-            if (App.IsSynchronizing) _memoService.DeleteAsync(e.Memo.Id);
-            MemoModels.Remove(e);
-        });
+        ConfirmContentInput = new DelegateCommand<RichTextBox>(ConfirmInput);
+        DeleteSpecific = new DelegateCommand<EditableMemoModel>(Delete);
     }
 
     #region PrivateMethods
@@ -108,8 +91,12 @@ public class MemoEditorViewModel : NavigationModel
 #if LOCAL
         await _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(memo.Memo));
 #else
-        await _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(memo.Memo));
-        if (App.IsSynchronizing) await _memoService.UpdateAsync(_mapper.Map<MemoDto>(memo.Memo));
+        if (App.IsSynchronizing)
+        {
+            var response = await _memoService.UpdateAsync(_mapper.Map<MemoDto>(memo.Memo));
+            App.IsSynchronizing = response.Connected;
+        }
+        await _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(memo.Memo), App.IsSynchronizing);
 #endif
         _timerService.RegisterToTimers(memo.Memo);
     }
@@ -143,13 +130,45 @@ public class MemoEditorViewModel : NavigationModel
             StartTime = t,
             EndTime = t.AddMinutes(1)
         };
-        var result = await _memoRepository.AddAsync(memoDto);
-        if (App.IsSynchronizing) await _memoService.AddAsync(memoDto);
+        if (App.IsSynchronizing)
+        {
+            var response = await _memoService.AddAsync(memoDto);
+            App.IsSynchronizing = response.Connected;
+        }
+        var result = await _memoRepository.AddAsync(memoDto, App.IsSynchronizing);
 #endif        
         var memoRecord = _mapper.Map<MemoRecord>(result.Result);
         _timerService.RegisterToTimers(memoRecord);
         _memoModels.Insert(_memoModels.Count, new EditableMemoModel(memoRecord));
         Aggregator.UpdateLoadingStatus(false);
+    }
+    
+    private async void Delete(EditableMemoModel e)
+    {
+        if (App.IsSynchronizing)
+        {
+            var response = await _memoService.DeleteAsync(e.Memo.Id);
+            App.IsSynchronizing = response.Connected;
+        }
+        await _memoRepository.DeleteAsync(e.Memo.Id, App.IsSynchronizing);
+        MemoModels.Remove(e);
+    }
+
+    private async void ConfirmInput(RichTextBox textBox)
+    {
+        var content = new TextRange(textBox.Document.ContentStart, textBox.Document.ContentEnd).Text;
+        if (textBox.Document.DataContext is not EditableMemoModel context) return;
+        context.Memo.Content = content;
+#if LOCAL
+            _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
+#else
+        if (App.IsSynchronizing)
+        {
+            var response = await _memoService.UpdateAsync(_mapper.Map<MemoDto>(context.Memo));
+            App.IsSynchronizing = response.Connected;
+        }
+        await _memoRepository.UpdateAsync(_mapper.Map<MemoDto>(context.Memo), !App.IsSynchronizing);
+#endif
     }
 
     #endregion

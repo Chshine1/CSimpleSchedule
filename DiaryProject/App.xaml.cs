@@ -47,12 +47,6 @@ public partial class App : PrismApplication
 
     protected override Window CreateShell()
     {
-        Exit += (_, _) =>
-        {
-            if (!IsUserRegistered) return;
-            var repository = Container.Resolve<IMemoLocalRepository>();
-            repository.DropLogsDatabase();
-        };
         return Container.Resolve<MainView>();
     }
 }
