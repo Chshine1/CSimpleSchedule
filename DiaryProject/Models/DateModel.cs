@@ -8,9 +8,9 @@ namespace DiaryProject.Models;
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class DateModel : BindableBase
 {
-    public string BackgroundColor { get; set; } = null!;
+    public required string BackgroundColor { get; set; }
 
-    public string TextColor { get; set; } = null!;
+    public required string TextColor { get; set; }
 
-    public string DateText { get; set; } = null!;
+    public string DateText { get; set; } = string.Empty;
 }

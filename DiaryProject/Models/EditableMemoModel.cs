@@ -1,20 +1,21 @@
-using System.ComponentModel;
-using System.Globalization;
-using System.Timers;
-using System.Windows;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Documents;
 using DiaryProject.Utils;
-using Timer = System.Timers.Timer;
 
 namespace DiaryProject.Models;
 
+[SuppressMessage("ReSharper", "UnusedMember.Global")]
 public class EditableMemoModel : BindableBase
 {
     private static readonly string[] HeaderColors = ["DarkGray", "#6FA3FF", "#DB4848", "#DBCF5E", "#62CE58"];
     private static readonly string[] CategoryTexts = ["-未分类-", " 日记", " 提醒", " 闹钟", " 备忘录"];
     private static readonly string[] CategoryDisplays = ["事件类别：未分类", "事件类别：日记", "事件类别：提醒", "事件类别：闹钟", "事件类别：备忘录"];
-
+    
     private bool _status;
+    private MemoRecord _memo;
+    
+    #region Properties
+
     public bool Status
     {
         get => _status;
@@ -26,7 +27,6 @@ public class EditableMemoModel : BindableBase
         }
     }
 
-    private MemoRecord _memo;
     public MemoRecord Memo
     {
         get => _memo;
@@ -39,14 +39,6 @@ public class EditableMemoModel : BindableBase
             RaisePropertyChanged();
             RaisePropertyChanged(nameof(ContentDocument));
         }
-    }
-
-    public EditableMemoModel(MemoRecord memo)
-    {
-        _memo = memo;
-        ContentDocument = _memo.Content.ConvertToFlowDocument();
-        ContentDocument.Focusable = true;
-        ContentDocument.LineHeight = 1;
     }
 
     public FlowDocument? ContentDocument { get; private set; }
@@ -161,4 +153,14 @@ public class EditableMemoModel : BindableBase
     public string StatusText => !Memo.Active ? "状态：未激活" : Status ? "状态：进行中" : "状态：未开始";
 
     public string BackgroundColor => Memo.Active && Status ? "#E6EFFF" : "#F3F3F4";
+
+    #endregion
+
+    public EditableMemoModel(MemoRecord memo)
+    {
+        _memo = memo;
+        ContentDocument = _memo.Content.ConvertToFlowDocument();
+        ContentDocument.Focusable = true;
+        ContentDocument.LineHeight = 1;
+    }
 }

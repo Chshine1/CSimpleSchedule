@@ -11,15 +11,19 @@ namespace DiaryProject.Models;
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class MenuItemModel : INotifyPropertyChanged
 {
-    public string Icon { get; set; } = null!;
+    private bool _isPageEnabled;
+    private bool _isUserRegistered;
 
-    public string TargetName { get; set; } = null!;
+    #region Properties
+
+    public required string Icon { get; set; }
+
+    public required string TargetName { get; set; }
 
     public bool IsAccount { get; init; }
 
     public required string ToolTipText { get; init; }
 
-    private bool _isPageEnabled;
     public bool IsPageEnabled
     {
         get => _isPageEnabled;
@@ -31,8 +35,6 @@ public class MenuItemModel : INotifyPropertyChanged
         }
     }
 
-    private bool _isUserRegistered;
-
     public bool IsUserRegistered
     {
         get => _isUserRegistered;
@@ -43,12 +45,14 @@ public class MenuItemModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(IconColor));
         }
     }
-
+    
     public string IconColor => IsAccount ? IsUserRegistered ? "#7BD672" : "#E16464" : IsPageEnabled ? "DimGray" : "#AAAAAA";
+
+    #endregion
     
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
