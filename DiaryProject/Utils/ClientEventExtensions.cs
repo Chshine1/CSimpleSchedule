@@ -12,12 +12,12 @@ public static class ClientEventExtensions
 {
     public static void UpdateLoadingStatus(this IEventAggregator aggregator, bool isOpen)
     {
-        aggregator.GetEvent<LoadingStatusChanged>().Publish(new LoadingStatusChangeModel { IsOpen = isOpen });
+        aggregator.GetEvent<LoadingStatusChanged>().Publish(new LoadingStatusModel { IsOpen = isOpen });
     }
 
     public static void PassToEditor(this IEventAggregator aggregator, List<MemoRecord> memos, DateTime editedDate)
     {
-        aggregator.GetEvent<EditorUpdated>().Publish(new EditorStartedModel { Memos = memos, EditedDate = editedDate});
+        aggregator.GetEvent<EditorUpdated>().Publish(new EditorUpdatedModel { Memos = memos, EditedDate = editedDate});
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ public static class ClientEventExtensions
 
     public static void NotifyAction(this IEventAggregator aggregator, ActionsToNotify action)
     {
-        aggregator.GetEvent<ActionNotified>().Publish(new NotifyActionModel { ActionToNotify = action });
+        aggregator.GetEvent<ActionNotified>().Publish(action);
     }
 
     public static void NotifyNavigation(this IEventAggregator aggregator, NavigationContext context)
@@ -40,6 +40,6 @@ public static class ClientEventExtensions
 
     public static void UpdateUserStatus(this IEventAggregator aggregator, UserOperation operation, string token)
     {
-        aggregator.GetEvent<AccountEvent>().Publish(new AccountModel { Operation = operation, Token = token });
+        aggregator.GetEvent<AccountEvent>().Publish(operation);
     }
 }

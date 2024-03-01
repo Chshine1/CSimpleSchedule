@@ -2,10 +2,10 @@ using DiaryProject.Models;
 
 namespace DiaryProject.Events;
 
-public class EditorStartedModel
+public class EditorUpdatedModel
 {
     public required List<MemoRecord> Memos { get; init; }
     public DateTime EditedDate { get; init; }
 }
 
-public class EditorUpdated : PubSubEvent<EditorStartedModel>;
+public class EditorUpdated : PubSubEvent<EditorUpdatedModel>;

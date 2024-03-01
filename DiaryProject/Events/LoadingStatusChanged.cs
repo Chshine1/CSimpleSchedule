@@ -1,8 +1,8 @@
 namespace DiaryProject.Events;
 
-public class LoadingStatusChangeModel
+public class LoadingStatusModel
 {
     public bool IsOpen { get; init; }
 }
 
-public class LoadingStatusChanged : PubSubEvent<LoadingStatusChangeModel>;
+public class LoadingStatusChanged : PubSubEvent<LoadingStatusModel>;

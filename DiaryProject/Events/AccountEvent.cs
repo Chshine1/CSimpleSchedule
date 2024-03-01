@@ -8,10 +8,4 @@ public enum UserOperation
     
 }
 
-public class AccountModel
-{
-    public UserOperation Operation { get; set; }
-    public string Token { get; set; }
-}
-
-public class AccountEvent : PubSubEvent<AccountModel>;
+public class AccountEvent : PubSubEvent<UserOperation>;

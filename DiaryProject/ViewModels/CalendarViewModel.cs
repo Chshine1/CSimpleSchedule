@@ -102,7 +102,7 @@ public class CalendarViewModel : NavigationModel
         // Called when the editor tells this to send the current selected day for editing
         Aggregator.GetEvent<ActionNotified>().Subscribe(n =>
         {
-            if (n.ActionToNotify != ActionsToNotify.PassToMemoEditor || _selectedMemo == null) return;
+            if (n != ActionsToNotify.PassToMemoEditor || _selectedMemo == null) return;
             Aggregator.PassToEditor(_selectedMemo.GetMemos(), _selectedMemo.Date);
         });
         

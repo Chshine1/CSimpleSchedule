@@ -93,8 +93,8 @@ public class MainViewModel : BindableBase
         aggregator.GetEvent<AccountEvent>().Subscribe(arg =>
         {
             Debug.Assert(MenuItemModels != null, nameof(MenuItemModels) + " != null");
-            MenuItemModels[0].IsUserRegistered = arg.Operation == UserOperation.SuccessfullyLogin;
-            if (arg.Operation == UserOperation.ExitAccount)
+            MenuItemModels[0].IsUserRegistered = arg == UserOperation.SuccessfullyLogin;
+            if (arg == UserOperation.ExitAccount)
             {
                 MenuItemModels[0].IsUserRegistered = false;
                 MenuItemModels[1].IsPageEnabled = false;
@@ -102,7 +102,7 @@ public class MainViewModel : BindableBase
                 _regionManager.Regions["MainPanel"].RequestNavigate(nameof(LoginView));
                 return;
             }
-            _regionManager.Regions["MainPanel"].RequestNavigate(arg.Operation == UserOperation.SuccessfullyLogin ? nameof(UserView) : nameof(CalendarView));
+            _regionManager.Regions["MainPanel"].RequestNavigate(arg == UserOperation.SuccessfullyLogin ? nameof(UserView) : nameof(CalendarView));
             MenuItemModels[1].IsPageEnabled = true;
         });
         
