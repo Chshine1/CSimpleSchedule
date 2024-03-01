@@ -17,6 +17,7 @@
       <PackageReference Include="RestSharp" Version="110.2.1-alpha.0.16" />
       <PackageReference Include="ShowMeTheXAML" Version="2.0.0" />
       <PackageReference Include="sqlite-net-pcl" Version="1.9.141-beta" />
+      <PackageReference Include="Unnoficial.Microsoft.Expression.Drawing" Version="1.0.0" />
       <PackageReference Include="YiJingFramework.Nongli" Version="4.0.0" />
     </ItemGroup>
 

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:mat="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:local="clr-namespace:DiaryProject.Utils">
+             xmlns:dr="http://schemas.microsoft.com/expression/2010/drawing">
     <Application.Resources>
         <ResourceDictionary>
             
@@ -112,23 +112,22 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ProgressBar">
-                            <Canvas Background="Transparent" Width="80" Height="80">
-                                <Path Fill="White" Stroke="White">
-                                    <Path.Data>
-                                        <PathGeometry>
-                                            <PathFigure StartPoint="40,0" IsClosed="True">
-                                                <PathFigure.Segments>
-                                                    <PathSegmentCollection>
-                                                        <ArcSegment Point="80,40" Size="40,40" RotationAngle="0" IsLargeArc="False" SweepDirection="Clockwise" />
-                                                        <LineSegment Point="75,40" />
-                                                        <ArcSegment Point="40,5" Size="35,35" SweepDirection="Counterclockwise" />
-                                                    </PathSegmentCollection>
-                                                </PathFigure.Segments>
-                                            </PathFigure>
-                                        </PathGeometry>
-                                    </Path.Data>
-                                </Path>
-                            </Canvas>
+                            <Grid Background="Transparent" Width="80" Height="80">
+                                <dr:Arc x:Name="Bar" Fill="White" Stroke="White" Opacity="0.75"
+                                        Stretch="None" StartAngle="0" EndAngle="270" ArcThickness="5" />
+                                <Grid.Triggers>
+                                    <EventTrigger RoutedEvent="Loaded">
+                                        <EventTrigger.Actions>
+                                            <BeginStoryboard>
+                                                <Storyboard TargetName="Bar">
+                                                    <DoubleAnimation From="1" To="360" Duration="0:0:1" Storyboard.TargetProperty="StartAngle" AutoReverse="False" RepeatBehavior="Forever" />
+                                                    <DoubleAnimation From="136" To="495" Duration="0:0:1" Storyboard.TargetProperty="EndAngle" AutoReverse="False" RepeatBehavior="Forever" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger.Actions>
+                                    </EventTrigger>
+                                </Grid.Triggers>
+                            </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

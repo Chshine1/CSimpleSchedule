@@ -73,7 +73,7 @@ public class MainViewModel : BindableBase
         _idsInSchedule = new List<int>();
         aggregator.GetEvent<LoadingStatusChanged>().Subscribe(arg =>
         {
-            //IsLoading = arg.IsOpen;
+            IsLoading = arg.IsOpen;
         });
         aggregator.GetEvent<EditorNavigationChanged>().Subscribe(arg =>
         {
