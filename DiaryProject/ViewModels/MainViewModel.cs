@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using DiaryProject.Events;
@@ -14,18 +13,20 @@ namespace DiaryProject.ViewModels;
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class MainViewModel : BindableBase
 {
-    private readonly IRegionManager _regionManager;
     private readonly IMemoLocalRepository _memoRepository;
-
+    
+    private bool _isLoading;
     private readonly List<int> _idsInSchedule;
+    private MonthModel _calendarTitleModelModel;
+    private ObservableCollection<DateModel> _dateModels;
+
+    #region BoundProperties
 
     public string ScheduleText => _idsInSchedule.Count == 0 ? "无进行中日程" : $"{_idsInSchedule.Count}进行中日程";
 
     public string ScheduleColor => _idsInSchedule.Count == 0 ? "Gray" : "#6FA3FF";
 
     public FontWeight ScheduleTextWeight => _idsInSchedule.Count == 0 ? FontWeights.Normal : FontWeights.Bold;
-    
-    private bool _isLoading = false;
 
     public bool IsLoading
     {
@@ -37,8 +38,6 @@ public class MainViewModel : BindableBase
         }
     }
 
-    private MonthModel _calendarTitleModelModel; // Model of the current month of the calendar in the left panel
-
     public MonthModel CalendarTitleModel
     {
         get => _calendarTitleModelModel;
@@ -49,7 +48,6 @@ public class MainViewModel : BindableBase
         }
     }
 
-    private ObservableCollection<DateModel> _dateModels; // Models of the days in the month
     public ObservableCollection<DateModel> DateModels
     {
         get => _dateModels;
@@ -66,18 +64,35 @@ public class MainViewModel : BindableBase
     public DelegateCommand CalendarNext { get; private set; }
     public DelegateCommand CalendarLast { get; private set; }
 
+    #endregion
+
     public MainViewModel(IRegionManager regionManager, IEventAggregator aggregator, IMemoLocalRepository memoRepository)
     {
-        _regionManager = regionManager;
+        var regionManager1 = regionManager;
         _memoRepository = memoRepository;
+        
         _idsInSchedule = new List<int>();
+        _calendarTitleModelModel = new MonthModel(DateTime.Now);
+        _dateModels = GetDatesPanels(TimeProcessor.GetMonthCalendar(DateTime.Now));
+
+        MenuItemModels = new ObservableCollection<MenuItemModel>
+        {
+            new() { Icon = "AccountCircle", TargetName = nameof(LoginView), IsPageEnabled = true, IsAccount = true, ToolTipText = "用户"},
+            new() { Icon = "CalendarMonth", TargetName = nameof(CalendarView), IsPageEnabled = false, IsAccount = false, ToolTipText = "日历"},
+            new() { Icon = "Notebook", TargetName = nameof(MemoEditorView), IsPageEnabled = false, IsAccount = false, ToolTipText = "编辑日程"}
+        };
+        
+        NavigateCommand = new DelegateCommand<MenuItemModel>(m => { regionManager1.Regions["MainPanel"].RequestNavigate(m.TargetName); });
+        CalendarNext = new DelegateCommand(() => { RefreshCalendar(CalendarTitleModel.NextMonth()); });
+        CalendarLast = new DelegateCommand(() => { RefreshCalendar(CalendarTitleModel.LastMonth()); });
+        
         aggregator.GetEvent<LoadingStatusChanged>().Subscribe(arg =>
         {
             IsLoading = arg.IsOpen;
         });
         aggregator.GetEvent<EditorNavigationChanged>().Subscribe(arg =>
         {
-            MenuItemModels![2].IsPageEnabled = arg.IsEnabled;
+            MenuItemModels[2].IsPageEnabled = arg.IsEnabled;
         });
         aggregator.GetEvent<TimerStatusChanged>().Subscribe(arg =>
         {
@@ -87,45 +102,27 @@ public class MainViewModel : BindableBase
             RaisePropertyChanged(nameof(ScheduleText));
             RaisePropertyChanged(nameof(ScheduleColor));
             RaisePropertyChanged(nameof(ScheduleTextWeight));
+            
             if (!arg.SendNotification) return;
             NotifySchedule(arg.Id, arg.Status);
         });
         aggregator.GetEvent<AccountEvent>().Subscribe(arg =>
         {
-            Debug.Assert(MenuItemModels != null, nameof(MenuItemModels) + " != null");
             MenuItemModels[0].IsUserRegistered = arg == UserOperation.SuccessfullyLogin;
             if (arg == UserOperation.ExitAccount)
             {
                 MenuItemModels[0].IsUserRegistered = false;
                 MenuItemModels[1].IsPageEnabled = false;
                 MenuItemModels[2].IsPageEnabled = false;
-                _regionManager.Regions["MainPanel"].RequestNavigate(nameof(LoginView));
+                regionManager1.Regions["MainPanel"].RequestNavigate(nameof(LoginView));
                 return;
             }
-            _regionManager.Regions["MainPanel"].RequestNavigate(arg == UserOperation.SuccessfullyLogin ? nameof(UserView) : nameof(CalendarView));
+            regionManager1.Regions["MainPanel"].RequestNavigate(arg == UserOperation.SuccessfullyLogin ? nameof(UserView) : nameof(CalendarView));
             MenuItemModels[1].IsPageEnabled = true;
         });
-        
-        NavigateCommand = new DelegateCommand<MenuItemModel>(Navigate);
-        CalendarNext = new DelegateCommand(() => { RefreshCalendar(CalendarTitleModel.NextMonth()); });
-        CalendarLast = new DelegateCommand(() => { RefreshCalendar(CalendarTitleModel.LastMonth()); });
-        
-        _dateModels = GetDatesPanels(TimeProcessor.GetMonthCalendar(DateTime.Now));
-
-        MenuItemModels = new ObservableCollection<MenuItemModel>
-        {
-            new() { Icon = "AccountCircle", TargetName = nameof(LoginView), IsPageEnabled = true, IsAccount = true, ToolTipText = "用户"},
-            new() { Icon = "CalendarMonth", TargetName = nameof(CalendarView), IsPageEnabled = false, IsAccount = false, ToolTipText = "日历"},
-            new() { Icon = "Notebook", TargetName = nameof(MemoEditorView), IsPageEnabled = false, IsAccount = false, ToolTipText = "编辑日程"}
-        };
-
-        _calendarTitleModelModel = new MonthModel(DateTime.Now);
     }
 
-    private void Navigate(MenuItemModel obj)
-    {
-        _regionManager.Regions["MainPanel"].RequestNavigate(obj.TargetName);
-    }
+    #region PrivateMethods
     
     private async void NotifySchedule(int id, bool status)
     {
@@ -164,4 +161,6 @@ public class MainViewModel : BindableBase
         }
         return result;
     }
+
+    #endregion
 }

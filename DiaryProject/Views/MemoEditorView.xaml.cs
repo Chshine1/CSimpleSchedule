@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Windows.Controls;
 using System.Windows.Input;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using UserControl = System.Windows.Controls.UserControl;

@@ -23,7 +23,6 @@ public partial class App : PrismApplication
 
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
-        // Register HttpRestClient, to be injected to the services
         containerRegistry.GetContainer()
             .Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
         containerRegistry.RegisterInstance("https://localhost:44319/", "webUrl");

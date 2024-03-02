@@ -21,7 +21,7 @@ public static class ClientEventExtensions
     }
 
     /// <summary>
-    /// Set if the editor is enabled and can be accessed by the user
+    /// 设置用户能否使用编辑器
     /// </summary>
     public static void UpdateEditorStatus(this IEventAggregator aggregator, bool isEnabled)
     {

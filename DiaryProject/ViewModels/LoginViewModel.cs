@@ -101,44 +101,5 @@ public class LoginViewModel : NavigationModel
         }
     }
     
-    /* TODO:The following methods should be in somewhere else */
-
-    /*private async void SynchronizingWithServer()
-    {
-        var logs = await _memoRepository.GetLogs();
-        foreach (var log in logs)
-        {
-            try
-            {
-                switch (log.Operation)
-                {
-                    case 0:
-                        await _memoService.AddAsync((await _memoRepository.GetFirstOrDefaultAsync(log.EntityId)).Result);
-                        break;
-                    case 1:
-                        await _memoService.UpdateAsync((await _memoRepository.GetFirstOrDefaultAsync(log.EntityId)).Result);
-                        break;
-                    case 2:
-                        await _memoService.DeleteAsync(log.EntityId);
-                        break;
-                    case 3:
-                        if (!log.Exists)
-                        {
-                            var m = await _memoService.AddAsync(new MemoDto());
-                            _memoService.DeleteAsync(m.Result.Id);
-                        }
-
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(log.Operation), log.Operation, null);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-        }
-    }*/
-
     #endregion
 }

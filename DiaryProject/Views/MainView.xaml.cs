@@ -15,11 +15,26 @@ public partial class MainView : Window
 {
     private readonly System.Timers.Timer _timer = new(1000);
 
-    private const string StartUpView = "LoginView";
+    private const string StartUpView = nameof(LoginView);
     
     public MainView(IEventAggregator aggregator, IRegionManager regionManager)
     {
         InitializeComponent();
+        InitializeClock();
+        
+        MinimizeButton.Click += (_, _) => WindowState = WindowState.Minimized;
+        MaximizeButton.Click += (_, _) =>
+        {
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            MaximizeIcon.Kind = WindowState == WindowState.Maximized ? PackIconKind.WindowRestore : PackIconKind.WindowMaximize;
+        };
+        CloseButton.Click += (_, _) => Close();
+        Loaded += (_, _) =>
+        {
+            MenuBar.SelectedItem = MenuBar.Items[0];
+            regionManager.Regions["MainPanel"].RequestNavigate(StartUpView);
+        };
+        
         aggregator.GetEvent<PageNavigatedTo>().Subscribe(arg =>
         {
             MenuBarCommand.IsEnabled = false;
@@ -33,30 +48,19 @@ public partial class MainView : Window
             };
             MenuBarCommand.IsEnabled = true;
         });
-        MinimizeButton.Click += (_, _) => WindowState = WindowState.Minimized;
-        MaximizeButton.Click += (_, _) =>
-        {
-            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-            MaximizeIcon.Kind = WindowState == WindowState.Maximized ? PackIconKind.WindowRestore : PackIconKind.WindowMaximize;
-        };
-        CloseButton.Click += (_, _) => Close();
+    }
+
+    private void InitializeClock()
+    {
         SecondPointer.Angle = DateTime.Now.Millisecond / (double) 1000 * 6 + 180;
         MinutePointer.Angle = DateTime.Now.Minute * 6 + 180;
         HourPointer.Angle = DateTime.Now.Hour * 30 + DateTime.Now.Minute * 0.5 + 180;
         TimeBlock.Text = DateTime.Now.ToLongTimeString();
         DateBlock.Text = DateTime.Now.ToString("yyyy/M/d") + " " + DateTime.Now.GetChineseDayOfWeek();
+        
+        // ReSharper disable once NullableWarningSuppressionIsUsed
         _timer.Elapsed += TimeElapsed!;
         _timer.Start();
-        Loaded += (_, _) =>
-        {
-            MenuBar.SelectedItem = MenuBar.Items[0];
-            regionManager.Regions["MainPanel"].RequestNavigate(nameof(LoginView));
-        };
-    }
-
-    private void Border_OnDragOver(object sender, MouseEventArgs e)
-    {
-        if (e.LeftButton == MouseButtonState.Pressed) DragMove();
     }
     
     private void TimeElapsed(object sender, ElapsedEventArgs e)
@@ -69,5 +73,10 @@ public partial class MainView : Window
             TimeBlock.Text = DateTime.Now.ToLongTimeString();
             DateBlock.Text = DateTime.Now.ToString("yyyy/M/d") + " " + DateTime.Now.GetChineseDayOfWeek();
         });
+    }
+
+    private void Border_OnDragOver(object sender, MouseEventArgs e)
+    {
+        if (e.LeftButton == MouseButtonState.Pressed) DragMove();
     }
 }
