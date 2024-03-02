@@ -3,7 +3,7 @@ using RestSharp;
 namespace DiaryProject.Service.Web;
 
 /// <summary>
-/// Base record for http requests
+/// 客户端发送Http请求的记录
 /// </summary>
 public record BaseRequest
 {

@@ -2,7 +2,6 @@ using System.IO;
 using DiaryProject.Service.Web;
 using DiaryProject.Shared.Contact;
 using DiaryProject.Shared.Dtos;
-using DiaryProject.Shared.Parameters;
 using DiaryProject.Shared.Utils;
 using SQLite;
 
@@ -99,7 +98,7 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
         }
     }
     
-    public async void UpdateChanges(IBaseService<TEntity, MemoParameter> webService)
+    public async void UpdateChanges(IBaseService<TEntity> webService)
     {
         var logs = await _connection.QueryAsync<DatabaseLogDto>("SELECT * FROM logs ORDER BY UpdateTime asc");
         foreach (var log in logs)
@@ -130,11 +129,11 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
     }
 
     /// <summary>
-    /// Write to log when an operation is done to an entity
+    /// 对一个实体执行某些操作时，记录到日志中
     /// </summary>
-    /// <param name="entityId">The id of the entity operated</param>
-    /// <param name="operation">The kind of the operation</param>
-    /// <exception cref="ArgumentOutOfRangeException">Unidentified operation</exception>
+    /// <param name="entityId">被操作实体的主键</param>
+    /// <param name="operation">被执行的操作</param>
+    /// <exception cref="ArgumentOutOfRangeException">无法识别的操作</exception>
     private async Task WriteLogEntry(int entityId, DatabaseOperation operation)
     {
         DatabaseLogDto? log = null;

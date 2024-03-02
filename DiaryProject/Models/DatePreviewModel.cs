@@ -10,10 +10,10 @@ using YiJingFramework.Nongli.Lunar;
 namespace DiaryProject.Models;
 
 /// <summary>
-/// Model for the calendar for memos
+/// 日程预览中一个单元格的模型类
 /// </summary>
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
-public class MemoModel : BindableBase, INotifyPropertyChanged
+public class DatePreviewModel : BindableBase, INotifyPropertyChanged
 {
     private static readonly string[] BackgroundColors = ["LightGray", "#91B9FF", "#E16464", "#E1D77A", "#7BD672", "DarkGray", "#6FA3FF", "#DB4848", "#DBCF5E", "#62CE58"];
     private static string CategoryColor(int category, bool active)
@@ -72,7 +72,7 @@ public class MemoModel : BindableBase, INotifyPropertyChanged
 
     #endregion
  
-    public MemoModel(bool active, DateTime date, IGrouping<int, MemoDto>? grouping, IMapperBase mapper)
+    public DatePreviewModel(bool active, DateTime date, IGrouping<int, MemoDto>? grouping, IMapperBase mapper)
     {
         Date = date;
         _active = active;

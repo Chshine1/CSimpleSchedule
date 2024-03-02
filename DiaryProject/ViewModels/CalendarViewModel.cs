@@ -46,8 +46,8 @@ public class CalendarViewModel : NavigationModel
         }
     }
     
-    private MemoModel? _selectedMemo;
-    public MemoModel? SelectedMemo
+    private DatePreviewModel? _selectedMemo;
+    public DatePreviewModel? SelectedMemo
     {
         get => _selectedMemo;
         set
@@ -63,8 +63,8 @@ public class CalendarViewModel : NavigationModel
     }
     
     // ReSharper disable once NullableWarningSuppressionIsUsed
-    private ObservableCollection<MemoModel> _bigPanels = null!;
-    public ObservableCollection<MemoModel> BigPanels
+    private ObservableCollection<DatePreviewModel> _bigPanels = null!;
+    public ObservableCollection<DatePreviewModel> BigPanels
     {
         get => _bigPanels;
         private set
@@ -161,10 +161,10 @@ public class CalendarViewModel : NavigationModel
     /// <summary>
     /// Get the models of the calendar
     /// </summary>
-    private async Task<ObservableCollection<MemoModel>> GetDatesPanels(DateTime date)
+    private async Task<ObservableCollection<DatePreviewModel>> GetDatesPanels(DateTime date)
     {
         var dates = TimeProcessor.GetMonthCalendar(date);
-        var result = new ObservableCollection<MemoModel>();
+        var result = new ObservableCollection<DatePreviewModel>();
         var active = false;
 
 #if LOCAL
@@ -180,14 +180,14 @@ public class CalendarViewModel : NavigationModel
             {
                 if (d.Day == 1) active = !active;
                 var group = groupedMemos.FirstOrDefault(g => g.Key == d.Month * 100 + d.Day);
-                result.Add(new MemoModel(active, d, group, _mapper));
+                result.Add(new DatePreviewModel(active, d, group, _mapper));
             }
             return result;
         }
         foreach (var d in dates)
         {
             if (d.Day == 1) active = !active;
-            result.Add(new MemoModel(active, d, null, _mapper));
+            result.Add(new DatePreviewModel(active, d, null, _mapper));
         }
         return result;
     }

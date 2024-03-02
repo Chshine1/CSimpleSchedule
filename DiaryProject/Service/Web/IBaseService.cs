@@ -3,11 +3,10 @@ using DiaryProject.Shared.Contact;
 namespace DiaryProject.Service.Web;
 
 /// <summary>
-/// Base service for the client to access the database
+/// 客户端用来访问云端数据库的服务基类
 /// </summary>
-/// <typeparam name="TEntity">Type of the entity to be accessed</typeparam>
-/// <typeparam name="TParameter">Parameters for query</typeparam>
-public interface IBaseService<TEntity, in TParameter> where TEntity : class
+/// <typeparam name="TEntity">需要访问对象的类型</typeparam>
+public interface IBaseService<TEntity> where TEntity : class
 {
     Task<ApiResponse<TEntity>> AddAsync(TEntity entity);
 
@@ -17,7 +16,7 @@ public interface IBaseService<TEntity, in TParameter> where TEntity : class
 
     Task<ApiResponse<TEntity>> GetFirstOrDefaultAsync(int id);
 
-    Task<ApiResponse<IList<TEntity>>> GetAllAsync(TParameter parameter);
+    Task<ApiResponse<IList<TEntity>>> GetAllAsync();
     
     int GetVersion();
 }

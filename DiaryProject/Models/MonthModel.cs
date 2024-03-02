@@ -4,15 +4,12 @@ using DiaryProject.Shared.Utils;
 namespace DiaryProject.Models;
 
 /// <summary>
-/// Model representing one month
+/// 单个月份的模型类
 /// </summary>
-/// <param name="dateTime">Any day in the month</param>
+/// <param name="dateTime">该月份中的任意一天</param>
 [SuppressMessage("ReSharper", "UnusedMember.Global")]
 public class MonthModel(DateTime dateTime) : BindableBase
 {
-    /// <summary>
-    /// The name of the month in the specific calendar title format
-    /// </summary>
     public string MonthString => TimeProcessor.GetCalendarTitleMonth(dateTime);
 
     public DateTime NextMonth() => dateTime.AddMonths(1);

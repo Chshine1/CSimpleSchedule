@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace DiaryProject.Models;
 
 /// <summary>
-/// Model for the calendar located in the left bar
+/// 视图左端日历中日期的模型类
 /// </summary>
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class DateModel : BindableBase

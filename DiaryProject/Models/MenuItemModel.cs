@@ -6,7 +6,7 @@ using DiaryProject.Views;
 namespace DiaryProject.Models;
 
 /// <summary>
-/// Model for page selection located in the left bar
+/// 左端界面栏中界面选项的模型类
 /// </summary>
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class MenuItemModel : INotifyPropertyChanged

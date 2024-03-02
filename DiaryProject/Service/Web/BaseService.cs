@@ -3,12 +3,10 @@ using RestSharp;
 
 namespace DiaryProject.Service.Web;
 
-public class BaseService<TEntity, TParameter> : IBaseService<TEntity, TParameter> where TEntity : class
+public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
 {
     private readonly HttpRestClient _client;
-    
     private readonly string _serviceName;
-    // Which is also the name of the corresponding controller
 
     protected BaseService(HttpRestClient client, string serviceName)
     {
@@ -58,7 +56,7 @@ public class BaseService<TEntity, TParameter> : IBaseService<TEntity, TParameter
         return await _client.ExecuteAsync<TEntity>(request);
     }
 
-    public async Task<ApiResponse<IList<TEntity>>> GetAllAsync(TParameter parameter)
+    public async Task<ApiResponse<IList<TEntity>>> GetAllAsync()
     {
         var request = new BaseRequest
         {
