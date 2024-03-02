@@ -9,8 +9,6 @@ using YiJingFramework.Nongli.Lunar;
 
 namespace DiaryProject.Models;
 
-//TODO:Refactor
-
 /// <summary>
 /// Model for the calendar for memos
 /// </summary>
@@ -18,15 +16,19 @@ namespace DiaryProject.Models;
 public class MemoModel : BindableBase, INotifyPropertyChanged
 {
     private static readonly string[] BackgroundColors = ["LightGray", "#91B9FF", "#E16464", "#E1D77A", "#7BD672", "DarkGray", "#6FA3FF", "#DB4848", "#DBCF5E", "#62CE58"];
-
-    private readonly List<MemoRecord> _memos;
-
-    private List<MemoRecord> ActiveMemos => (from memo in _memos where memo.Active select memo).ToList();
+    private static string CategoryColor(int category, bool active)
+    {
+        return BackgroundColors[category - 1 + (active ? 0 : 5)];
+    }
     
+    private readonly List<MemoRecord> _memos;
     private readonly bool _isNow, _active;
-
     private bool _isSelected;
+    
+    private List<MemoRecord> ActiveMemos => (from memo in _memos where memo.Active select memo).ToList();
 
+    #region BoundProperties
+    
     public bool IsSelected
     {
         get => _isSelected;
@@ -39,27 +41,6 @@ public class MemoModel : BindableBase, INotifyPropertyChanged
     }
 
     public DateTime Date { get; }
-
-    public MemoModel(bool active, DateTime date, IGrouping<int, MemoDto>? grouping, IMapperBase mapper)
-    {
-        Date = date;
-        _active = active;
-        _isNow = DateTime.Now.Day == date.Day && DateTime.Now.Month == date.Month && DateTime.Now.Year == date.Year;
-        if (grouping == null)
-        {
-            _memos = new List<MemoRecord>();
-            return;
-        }
-        _memos = (from m in grouping orderby m.Order select mapper.Map<MemoRecord>(m)).ToList();
-    }
-
-    public IEnumerable<int> GetMemoIndices()
-    {
-        return (from memo in _memos select memo.Id).ToArray();
-    }
-
-    // The properties bound to the view
-    #region BoundProperties
 
     public string DateText => $"{Date.Day}  {LunarDateTime.FromGregorian(Date).RiInChinese()}{(_isNow ? "(今天)" : "")}{(IsSelected ? "(选中)" : "")}";
 
@@ -90,10 +71,29 @@ public class MemoModel : BindableBase, INotifyPropertyChanged
             : $"+{_memos.Count - Math.Min(3, ActiveMemos.Count)}";
 
     #endregion
+ 
+    public MemoModel(bool active, DateTime date, IGrouping<int, MemoDto>? grouping, IMapperBase mapper)
+    {
+        Date = date;
+        _active = active;
+        _isNow = DateTime.Now.Day == date.Day && DateTime.Now.Month == date.Month && DateTime.Now.Year == date.Year;
+        if (grouping == null)
+        {
+            _memos = new List<MemoRecord>();
+            return;
+        }
+        _memos = (from m in grouping orderby m.Order select mapper.Map<MemoRecord>(m)).ToList();
+    }
 
-    /// <summary>
-    /// Clear all memos in the day to make it empty
-    /// </summary>
+    #region PublicMethods
+
+    public List<MemoRecord> GetMemos() => _memos;
+    
+    public IEnumerable<int> GetMemoIndices()
+    {
+        return (from memo in _memos select memo.Id).ToArray();
+    }
+    
     public void Clear()
     {
         _memos.Clear();
@@ -106,6 +106,8 @@ public class MemoModel : BindableBase, INotifyPropertyChanged
         OnPropertyChanged(nameof(ThirdInfo));
         OnPropertyChanged(nameof(ForthInfo));
     }
+
+    #endregion
     
     public new event PropertyChangedEventHandler? PropertyChanged;
     
@@ -113,23 +115,17 @@ public class MemoModel : BindableBase, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
-
-    private static string CategoryColor(int category, bool active)
-    {
-        return BackgroundColors[category - 1 + (active ? 0 : 5)];
-    }
-
-    public List<MemoRecord> GetMemos() => _memos;
 }
 
+[SuppressMessage("ReSharper", "PropertyCanBeMadeInitOnly.Global")]
 public class MemoRecord
 {
-    public int Id { get; init; }
+    public int Id { get; set; }
     public int Order { get; set; }
     public bool Active { get; set; }
     public int Category { get; set; }
-    public string Title { get; set; }
-    public string Content { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string Content { get; set; } = string.Empty;
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
 }
