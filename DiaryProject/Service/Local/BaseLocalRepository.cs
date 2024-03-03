@@ -100,7 +100,7 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
     
     public async void UpdateChanges(IBaseService<TEntity> webService)
     {
-        var logs = await _connection.QueryAsync<DatabaseLogDto>("SELECT * FROM logs ORDER BY UpdateTime asc");
+        /*var logs = await _connection.QueryAsync<DatabaseLogDto>("SELECT * FROM logs ORDER BY UpdateTime asc");
         foreach (var log in logs)
         {
             switch (log.Operation)
@@ -119,7 +119,14 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
             }
         }
         await _connection.ExecuteAsync("DELETE FROM logs");
-        await _connection.ExecuteAsync("UPDATE sqlite_sequence SET seq=1 WHERE name=\"logs\"");
+        await _connection.ExecuteAsync("UPDATE sqlite_sequence SET seq=1 WHERE name=\"logs\"");*/
+        await webService.DeleteAllAsync();
+        var list = (await GetAllAsync()).Result;
+        if (list == null || list.Count == 0) return;
+        foreach (var entity in list)
+        {
+            await webService.AddAsync(entity);
+        }
     }
 
     //TODO:
