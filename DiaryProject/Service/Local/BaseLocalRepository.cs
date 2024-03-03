@@ -113,7 +113,7 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
         }
     }
     
-    public async void UpdateChanges(IBaseService<TEntity> webService)
+    public async void UpdateChangesAsync(IBaseService<TEntity> webService)
     {
         /*var logs = await _connection.QueryAsync<DatabaseLogDto>("SELECT * FROM logs ORDER BY UpdateTime asc");
         foreach (var log in logs)

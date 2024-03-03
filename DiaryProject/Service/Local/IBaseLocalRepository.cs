@@ -21,5 +21,5 @@ public interface IBaseLocalRepository<TEntity> where TEntity : class
     /// 将本地未同步的变化上传到服务器以再次同步
     /// </summary>
     /// <param name="webService">服务器服务的提供者</param>
-    void UpdateChanges(IBaseService<TEntity> webService);
+    void UpdateChangesAsync(IBaseService<TEntity> webService);
 }

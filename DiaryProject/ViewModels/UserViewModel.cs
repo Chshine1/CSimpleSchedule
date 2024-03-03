@@ -24,13 +24,15 @@ public class UserViewModel : NavigationModel
         });
         UseLocalCommand = new DelegateCommand(() =>
         {
-            repository.UpdateChanges(memoService);
+            repository.UpdateChangesAsync(memoService);
             App.IsSynchronizing = true;
             Aggregator.GetEvent<SynchronizingEvent>().Publish(true);
         });
         UseWebCommand = new DelegateCommand(() =>
         {
-            // Aggregator.GetEvent<SynchronizingEvent>().Publish(true);
+            memoService.UpdateChangesAsync(repository);
+            App.IsSynchronizing = true;
+            Aggregator.GetEvent<SynchronizingEvent>().Publish(true);
         });
     }
 }

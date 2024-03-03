@@ -1,3 +1,4 @@
+using DiaryProject.Service.Local;
 using DiaryProject.Shared.Contact;
 
 namespace DiaryProject.Service.Web;
@@ -19,4 +20,6 @@ public interface IBaseService<TEntity> where TEntity : class
     Task<ApiResponse<IList<TEntity>>> GetAllAsync();
 
     Task<ApiResponse<TEntity>> DeleteAllAsync();
+
+    void UpdateChangesAsync(IBaseLocalRepository<TEntity> localRepository);
 }

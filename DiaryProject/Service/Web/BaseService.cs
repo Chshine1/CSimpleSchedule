@@ -1,3 +1,4 @@
+using DiaryProject.Service.Local;
 using DiaryProject.Shared.Contact;
 using RestSharp;
 
@@ -74,6 +75,17 @@ public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
             Route = $"api/{_serviceName}/DeleteAll"
         };
         return await _client.ExecuteAsync<TEntity>(request);
+    }
+
+    public async void UpdateChangesAsync(IBaseLocalRepository<TEntity> localRepository)
+    {
+        await localRepository.DeleteAllAsync();
+        var list = (await GetAllAsync()).Result;
+        if (list == null || list.Count == 0) return;
+        foreach (var entity in list)
+        {
+            await localRepository.AddAsync(entity, false);
+        }
     }
 
     //TODO
