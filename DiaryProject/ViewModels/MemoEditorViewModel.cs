@@ -122,7 +122,7 @@ public class MemoEditorViewModel : NavigationModel
         var memoDto = new MemoDto
         {
             Id = 0,
-            Order = _memoModels.Count,
+            MemoOrder = _memoModels.Count,
             Active = false,
             Category = 1,
             Title = string.Empty,

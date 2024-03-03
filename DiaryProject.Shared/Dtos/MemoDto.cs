@@ -5,7 +5,7 @@ namespace DiaryProject.Shared.Dtos;
 [Table("memos")]
 public class MemoDto : BaseDto
 {
-    private int _order;
+    private int _memoOrder;
     private bool _active;
     private int _category;
     private string _title = null!;
@@ -13,12 +13,12 @@ public class MemoDto : BaseDto
     private DateTime _startTime;
     private DateTime _endTime;
     
-    public int Order
+    public int MemoOrder
     {
-        get => _order;
+        get => _memoOrder;
         set
         {
-            _order = value;
+            _memoOrder = value;
             OnPropertyChanged();
         }
     }

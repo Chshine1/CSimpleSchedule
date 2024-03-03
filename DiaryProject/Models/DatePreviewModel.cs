@@ -82,7 +82,7 @@ public class DatePreviewModel : BindableBase, INotifyPropertyChanged
             _memos = new List<MemoRecord>();
             return;
         }
-        _memos = (from m in grouping orderby m.Order select mapper.Map<MemoRecord>(m)).ToList();
+        _memos = (from m in grouping orderby m.MemoOrder select mapper.Map<MemoRecord>(m)).ToList();
     }
 
     #region PublicMethods
