@@ -12,7 +12,8 @@ public class DiaryContext(DbContextOptions<DiaryContext> options) : DbContext(op
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Memo>().HasKey(m => new { m.Id, m.UserId });
+        
         modelBuilder.Entity<Memo>()
             .Property(m => m.UserId)
             .HasDefaultValue(1);

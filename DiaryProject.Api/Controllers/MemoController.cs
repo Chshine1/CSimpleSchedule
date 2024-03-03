@@ -46,15 +46,10 @@ public class MemoController(IMemoService memoService, IUserService userService) 
         return await memoService.DeleteAsync(id, user);
     }
 
-    /*[HttpDelete]
-    public async Task<ApiResponse> DeleteAll()
+    [HttpDelete]
+    public async Task<ApiResponse<string>> DeleteAll()
     {
         var user = await JwtUserExtension.GetUserId(HttpContext, userService);
-        var memos = await memoService.GetAllAsync(new MemoParameter(), user);
-        foreach (var memoDto in memos.Result)
-        {
-            await memoService.DeleteAsync(memoDto.Id, user);
-        }
-        return new ApiResponse("", true);
-    }*/
+        return await memoService.DeleteAllAsync(user);
+    }
 }

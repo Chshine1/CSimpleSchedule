@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DiaryProject.Api.Migrations
 {
     [DbContext(typeof(DiaryContext))]
-    [Migration("20240220141202_fifthMigration")]
-    partial class fifthMigration
+    [Migration("20240303083225_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,8 +23,12 @@ namespace DiaryProject.Api.Migrations
             modelBuilder.Entity("DiaryProject.Api.Context.Memo", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(1);
 
                     b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
@@ -55,7 +59,9 @@ namespace DiaryProject.Api.Migrations
                     b.Property<DateTime>("UpdateTime")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "UserId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Memo");
                 });
@@ -82,7 +88,26 @@ namespace DiaryProject.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("DiaryProject.Api.Context.Memo", b =>
+                {
+                    b.HasOne("DiaryProject.Api.Context.User", "User")
+                        .WithMany("Memos")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DiaryProject.Api.Context.User", b =>
+                {
+                    b.Navigation("Memos");
                 });
 #pragma warning restore 612, 618
         }

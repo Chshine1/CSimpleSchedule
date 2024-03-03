@@ -66,6 +66,16 @@ public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
         return await _client.ExecuteAsync<IList<TEntity>>(request);
     }
 
+    public async Task<ApiResponse<TEntity>> DeleteAllAsync()
+    {
+        var request = new BaseRequest
+        {
+            Method = Method.Delete,
+            Route = $"api/{_serviceName}/DeleteAll"
+        };
+        return await _client.ExecuteAsync<TEntity>(request);
+    }
+
     //TODO
     public int GetVersion()
     {

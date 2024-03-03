@@ -95,6 +95,19 @@ public class MemoService(IUnitOfWork unitOfWork, [SuppressMessage("ReSharper", "
         }
     }
 
+    public Task<ApiResponse<string>> DeleteAllAsync(int user)
+    {
+        try
+        {
+            unitOfWork.ExecuteSqlCommand($"DELETE FROM Memo WHERE UserId={user}");
+            return Task.FromResult(new ApiResponse<string> { Status = true });
+        }
+        catch (Exception e)
+        {
+            return Task.FromResult(new ApiResponse<string> { Message = e.Message });
+        }
+    }
+
     private static bool InQuery(Memo memo, MemoParameter parameter)
     {
         if (!(parameter.Category == 0 || memo.Category == parameter.Category)) return false;
