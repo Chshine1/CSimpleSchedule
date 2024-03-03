@@ -9,16 +9,12 @@ namespace DiaryProject.ViewModels;
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public class UserViewModel : NavigationModel
 {
-    private readonly IMemoLocalRepository _repository;
-    private readonly IMemoService _memoService;
-    
     public DelegateCommand LogoutCommand { get; private init; }
+    public DelegateCommand UseLocalCommand { get; private init; }
+    public DelegateCommand UseWebCommand { get; private init; }
 
     public UserViewModel(IEventAggregator aggregator, IMemoLocalRepository repository, IMemoService memoService) : base(aggregator)
     {
-        _repository = repository;
-        _memoService = memoService;
-        
         LogoutCommand = new DelegateCommand(() =>
         {
             App.IsUserRegistered = false;
@@ -26,12 +22,15 @@ public class UserViewModel : NavigationModel
             App.UserToken = string.Empty;
             Aggregator.UpdateUserStatus(UserOperation.ExitAccount, string.Empty);
         });
-    }
-
-    public override void OnNavigatedTo(NavigationContext context)
-    {
-        base.OnNavigatedTo(context);
-        if (_repository.GetVersion() != _memoService.GetVersion()) return;
-        _repository.UpdateChanges(_memoService);
+        UseLocalCommand = new DelegateCommand(() =>
+        {
+            repository.UpdateChanges(memoService);
+            App.IsSynchronizing = true;
+            Aggregator.GetEvent<SynchronizingEvent>().Publish(true);
+        });
+        UseWebCommand = new DelegateCommand(() =>
+        {
+            // Aggregator.GetEvent<SynchronizingEvent>().Publish(true);
+        });
     }
 }

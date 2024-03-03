@@ -118,7 +118,13 @@ public class MainViewModel : BindableBase
                 return;
             }
             regionManager1.Regions["MainPanel"].RequestNavigate(arg == UserOperation.SuccessfullyLogin ? nameof(UserView) : nameof(CalendarView));
+            if (arg == UserOperation.LocalMode) MenuItemModels[1].IsPageEnabled = true;
+        });
+        aggregator.GetEvent<SynchronizingEvent>().Subscribe(arg =>
+        {
+            if (!arg) return;
             MenuItemModels[1].IsPageEnabled = true;
+            regionManager1.Regions["MainPanel"].RequestNavigate(nameof(CalendarView));
         });
     }
 

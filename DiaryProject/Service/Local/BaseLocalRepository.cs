@@ -72,6 +72,21 @@ public class BaseLocalRepository<TEntity> : IBaseLocalRepository<TEntity> where 
         }
     }
 
+    public async Task<LocalResponse<string>> DeleteAllAsync()
+    {
+        try
+        {
+            await _connection.ExecuteAsync("DELETE FROM memos");
+            await _connection.ExecuteAsync("UPDATE sqlite_sequence SET seq=0 WHERE name='memos'");
+            return new LocalResponse<string> { Status = true };
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
     public async Task<LocalResponse<TEntity>> GetFirstOrDefaultAsync(int id)
     {
         try

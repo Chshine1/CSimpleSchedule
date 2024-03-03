@@ -19,6 +19,4 @@ public interface IBaseService<TEntity> where TEntity : class
     Task<ApiResponse<IList<TEntity>>> GetAllAsync();
 
     Task<ApiResponse<TEntity>> DeleteAllAsync();
-    
-    int GetVersion();
 }
