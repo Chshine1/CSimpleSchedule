@@ -8,7 +8,7 @@ namespace DiaryProject.Service.Web;
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public class UserService(HttpRestClient client) : IUserService
 {
-    public async Task<ApiResponse<UserDto>> RegisterAsync(UserDto userDto)
+    public async Task<ApiResponse<string>> RegisterAsync(UserDto userDto)
     {
         var request = new BaseRequest
         {
@@ -16,7 +16,7 @@ public class UserService(HttpRestClient client) : IUserService
             Route = "api/User/Register",
             Parameter = userDto
         };
-        return await client.ExecuteAsync<UserDto>(request);
+        return await client.ExecuteAsync<string>(request);
     }
 
     public async Task<ApiResponse<string>> LoginAsync(string userName, string password)

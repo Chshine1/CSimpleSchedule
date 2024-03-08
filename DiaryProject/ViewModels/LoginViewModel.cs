@@ -6,6 +6,7 @@ using DiaryProject.Models;
 using DiaryProject.Service;
 using DiaryProject.Service.Local;
 using DiaryProject.Service.Web;
+using DiaryProject.Shared.Dtos;
 using DiaryProject.Utils;
 
 namespace DiaryProject.ViewModels;
@@ -27,6 +28,7 @@ public class LoginViewModel : NavigationModel
     public string FailureStatus { get; set; }
 
     public DelegateCommand LoginCommand { get; private init; }
+    public DelegateCommand RegisterCommand { get; private set; }
     public DelegateCommand LocalModeCommand { get; private init; }
     public DelegateCommand GotFocusCommand { get; private init; }
 
@@ -44,6 +46,7 @@ public class LoginViewModel : NavigationModel
         FailureStatus = "";
         
         LoginCommand = new DelegateCommand(Login);
+        RegisterCommand = new DelegateCommand(Register);
         LocalModeCommand = new DelegateCommand(() =>
         {
             App.IsUserRegistered = false;
@@ -68,6 +71,33 @@ public class LoginViewModel : NavigationModel
         if (!loginResult.Status)
         {
             FailureStatus = loginResult.Connected ? "*用户名或密码错误" : "*未连接到服务器，请考虑使用本地模式";
+            RaisePropertyChanged(nameof(FailureStatus));
+            Aggregator.UpdateLoadingStatus(false);
+            return;
+        }
+        FailureStatus = string.Empty;
+        RaisePropertyChanged(nameof(FailureStatus));
+        
+        App.IsUserRegistered = true;
+        App.IsSynchronizing = true;
+        App.UserToken = loginResult.Result;
+        
+        Debug.Assert(loginResult.Result != null, "loginResult.Result != null");
+        Aggregator.UpdateUserStatus(UserOperation.SuccessfullyLogin, loginResult.Result);
+        
+        Initialize();
+        
+        Aggregator.UpdateLoadingStatus(false);
+    }
+
+    private async void Register()
+    {
+        Aggregator.UpdateLoadingStatus(true);
+
+        var loginResult = await _userService.RegisterAsync(new UserDto { UserName = UserName, Password = Password });
+        if (!loginResult.Status)
+        {
+            FailureStatus = loginResult.Connected ? "*用户名已存在" : "*未连接到服务器，请考虑使用本地模式";
             RaisePropertyChanged(nameof(FailureStatus));
             Aggregator.UpdateLoadingStatus(false);
             return;

@@ -46,7 +46,10 @@
                     </TextBox>
                 </StackPanel>
                 <TextBlock FontSize="10" Margin="0,2" Text="{Binding FailureStatus}" Foreground="DarkRed" HorizontalAlignment="Center" />
-                <Button Width="100" Height="25" Content="登录" Margin="0,14,0,12" Command="{Binding LoginCommand}" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Width="100" Height="25" Content="注册" Margin="0,14,20,12" Command="{Binding RegisterCommand}" />
+                    <Button Width="100" Height="25" Content="登录" Margin="20,14,0,12" Command="{Binding LoginCommand}" />
+                </StackPanel>
                 <DockPanel Width="370" Margin="0,3,0,15">
                     <TextBlock Text="找回密码" Style="{StaticResource HyperLinkStyle}" FontSize="10" DockPanel.Dock="Left" HorizontalAlignment="Left" />
                     <mat:PackIcon Kind="HelpCircleOutline" DockPanel.Dock="Right" HorizontalAlignment="Right" Width="12" Height="12" Margin="1" Foreground="Gray"

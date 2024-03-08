@@ -15,7 +15,13 @@ namespace DiaryProject.Api.Controllers;
 public class UserController(IUserService service) : ControllerBase
 {
     [HttpPost]
-    public async Task<ApiResponse> Register(UserDto userDto) => await service.RegisterAsync(userDto);
+    public async Task<ApiResponse> Register(UserDto userDto)
+    {
+        var user = await service.RegisterAsync(userDto);
+        return !user.Status
+            ? new ApiResponse(user.Message)
+            : new ApiResponse(true, JwtUserExtension.GetToken(user.Result));
+    }
 
     [HttpGet]
     public async Task<ApiResponse> Login(string userName, string password)
