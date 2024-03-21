@@ -9,6 +9,7 @@
         <UseWindowsForms>true</UseWindowsForms>
         <AssemblyName>CSimpleSchedule</AssemblyName>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <ApplicationIcon>Images\Ico64.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>

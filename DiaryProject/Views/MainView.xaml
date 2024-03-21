@@ -13,7 +13,7 @@
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         FontFamily="微软雅黑"
-        Title="Names" Height="768" Width="1280"
+        Title="CSimpleDiary" Height="768" Width="1280"
         AllowsTransparency="True" WindowStyle="None"
         WindowStartupLocation="CenterScreen">
 
@@ -69,7 +69,7 @@
                         <TextBlock HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Margin="5,0,0,0"
-                                   Text="日记测试*(未保存)"
+                                   Text="CSimpleDiary"
                                    FontWeight="Bold"
                                    FontSize="14" />
                     </StackPanel>
