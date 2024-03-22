@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows;
 using AutoMapper;
 using DiaryProject.Events;
 using DiaryProject.Models;
@@ -23,14 +24,50 @@ public class LoginViewModel : NavigationModel
 
     #region BoundProperties
 
-    public string UserName { get; set; }
-    public string Password { get; set; }
+    private string _userName = "";
+    private bool _userHintEnabled = true;
+    private string _password = "";
+    private bool _passwordHintEnabled = true;
+    
+    public string UserName
+    {
+        get => _userName;
+        set
+        {
+            if (value.Contains((char) 0x0d))
+            {
+                FailureStatus = "*不合规的用户名";
+                return;
+            }
+            if (string.IsNullOrEmpty(value)) _userHintEnabled = true;
+            _userName = value;
+            RaisePropertyChanged(nameof(UserHintVisible));
+        }
+    }
+    
+    public string Password 
+    { 
+        get => _password;
+        set
+        {
+            if (value.Contains((char) 0x0d))
+            {
+                FailureStatus = "*不合规的密码";
+                return;
+            }
+            if (string.IsNullOrEmpty(value)) _passwordHintEnabled = true;
+            _password = value;
+            RaisePropertyChanged(nameof(PasswordHintVisible));
+        }
+    }
     public string FailureStatus { get; set; }
 
+    public Visibility UserHintVisible => _userHintEnabled ? Visibility.Visible : Visibility.Hidden;
+    public Visibility PasswordHintVisible => _passwordHintEnabled ? Visibility.Visible : Visibility.Hidden;
     public DelegateCommand LoginCommand { get; private init; }
     public DelegateCommand RegisterCommand { get; private set; }
     public DelegateCommand LocalModeCommand { get; private init; }
-    public DelegateCommand GotFocusCommand { get; private init; }
+    public DelegateCommand<string> GotFocusCommand { get; private init; }
 
     #endregion
 
@@ -54,8 +91,19 @@ public class LoginViewModel : NavigationModel
             Aggregator.UpdateUserStatus(UserOperation.LocalMode, string.Empty);
             Initialize();
         });
-        GotFocusCommand = new DelegateCommand(() =>
+        GotFocusCommand = new DelegateCommand<string>(t =>
         {
+            switch (t)
+            {
+                case "UserName":
+                    _userHintEnabled = false;
+                    RaisePropertyChanged(nameof(UserHintVisible));
+                    break;
+                case "Password":
+                    _passwordHintEnabled = false;
+                    RaisePropertyChanged(nameof(PasswordHintVisible));
+                    break;
+            }
             FailureStatus = string.Empty;
             RaisePropertyChanged(nameof(FailureStatus));
         });

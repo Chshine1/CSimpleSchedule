@@ -13,44 +13,49 @@
     </UserControl.Resources>
     <Grid Background="{StaticResource White4}" Width="970" Height="728">
         <TextBox x:Name="FocusHolder" Width="0" Height="0" Focusable="True" />
-        <Border Width="400" Height="275" Background="{StaticResource White2}" CornerRadius="6">
+        <Border Width="400" Height="260" Background="{StaticResource White2}" CornerRadius="6">
             <Border.Effect>
-                <DropShadowEffect BlurRadius="16" Opacity="0.25" ShadowDepth="0" />
+                <DropShadowEffect BlurRadius="18" Opacity="0.25" ShadowDepth="0" />
             </Border.Effect>
             <StackPanel>
-                <Image Source="/Images/Icon.png" Width="60" Height="60" Margin="0,15">
+                <Image Source="/Images/Icon.png" Width="60" Height="60" Margin="0,20,0,10">
                     <Image.Clip>
                         <EllipseGeometry Center="30,30" RadiusX="30" RadiusY="30" />
                     </Image.Clip>
                 </Image>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
-                    <TextBlock Text="用户名：" FontSize="16" />
-                    <TextBox PreviewKeyDown="EndUserNameInput" Focusable="True" Width="240" FontSize="16" Background="{StaticResource White3}" BorderThickness="1" Text="{Binding UserName}">
+                <Grid Width="280" Margin="0,10,0,0">
+                    <TextBox Style="{StaticResource InputBox}" PreviewKeyDown="EndUserNameInput"
+                             Focusable="True" Width="280" FontSize="14" Background="Gray" BorderThickness="1" Text="{Binding UserName}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="GotFocus">
-                                <i:InvokeCommandAction Command="{Binding GotFocusCommand}" />
+                                <i:InvokeCommandAction Command="{Binding GotFocusCommand}" CommandParameter="UserName" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBox>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,0">
-                    <TextBlock Text="密码：" FontSize="16" />
-                    <TextBox Width="240" FontSize="16" Margin="16,0,0,0" x:Name="PasswordBox" Focusable="True"
-                             Background="{StaticResource White3}" PreviewKeyDown="EndPasswordInput"
+                    <TextBlock Visibility="{Binding UserHintVisible}" Text="请输入用户名" FontSize="12" Grid.ZIndex="1" IsHitTestVisible="False" VerticalAlignment="Center" Foreground="Gray" />
+                </Grid>
+                <Grid Width="280" Margin="0,16,0,0">
+                    <TextBox Style="{StaticResource InputBox}" Width="280" FontSize="14" x:Name="PasswordBox" Focusable="True"
+                             Background="Gray" PreviewKeyDown="EndPasswordInput"
                              Text="{Binding Path=Password, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource PasswordConverter}, Mode=TwoWay}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="GotFocus">
-                                <i:InvokeCommandAction Command="{Binding GotFocusCommand}" />
+                                <i:InvokeCommandAction Command="{Binding GotFocusCommand}" CommandParameter="Password" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBox>
-                </StackPanel>
+                    <TextBlock Visibility="{Binding PasswordHintVisible}" Text="请输入密码" FontSize="12" Grid.ZIndex="1" IsHitTestVisible="False" VerticalAlignment="Center" Foreground="Gray" />
+                </Grid>
                 <TextBlock FontSize="10" Margin="0,2" Text="{Binding FailureStatus}" Foreground="DarkRed" HorizontalAlignment="Center" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Width="100" Height="25" Content="注册" Margin="0,14,20,12" Command="{Binding RegisterCommand}" />
-                    <Button Width="100" Height="25" Content="登录" Margin="20,14,0,12" Command="{Binding LoginCommand}" />
+                    <Button Style="{StaticResource DefaultButton}" Width="100" Height="25" Margin="0,12,35,12" Command="{Binding RegisterCommand}">
+                        <TextBlock Text="注 册" Foreground="{StaticResource White2}" FontSize="12" />
+                    </Button>
+                    <Button Style="{StaticResource DefaultButton}" Width="100" Height="25" Margin="35,12,0,12" Command="{Binding LoginCommand}">
+                        <TextBlock FontWeight="Bold" Text="登 录" Foreground="{StaticResource White1}" FontSize="12" />
+                    </Button>
                 </StackPanel>
-                <DockPanel Width="370" Margin="0,3,0,15">
+                <DockPanel Width="370" Margin="0,8,0,15">
                     <TextBlock Text="找回密码" Style="{StaticResource HyperLinkStyle}" FontSize="10" DockPanel.Dock="Left" HorizontalAlignment="Left" />
                     <mat:PackIcon Kind="HelpCircleOutline" DockPanel.Dock="Right" HorizontalAlignment="Right" Width="12" Height="12" Margin="1" Foreground="Gray"
                                   ToolTip="此操作不需要您连接到网络或登录，&#x000A;而是使用您本地存储的数据，您可以&#x000A;在登录后随时同步数据" ToolTipService.InitialShowDelay="40">
