@@ -13,6 +13,8 @@ namespace DiaryProject.Views;
 [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
 public partial class MainView : Window
 {
+    // ReSharper disable once NullableWarningSuppressionIsUsed
+    private HoverView _hoverView = null!;
     private readonly System.Timers.Timer _timer = new(1000);
 
     private const string StartUpView = nameof(LoginView);
@@ -28,11 +30,17 @@ public partial class MainView : Window
             WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
             MaximizeIcon.Kind = WindowState == WindowState.Maximized ? PackIconKind.WindowRestore : PackIconKind.WindowMaximize;
         };
-        CloseButton.Click += (_, _) => Close();
+        CloseButton.Click += (_, _) =>
+        {
+            _hoverView.Close();
+            Close();
+        };
         Loaded += (_, _) =>
         {
             MenuBar.SelectedItem = MenuBar.Items[0];
             regionManager.Regions["MainPanel"].RequestNavigate(StartUpView);
+            _hoverView = new HoverView();
+            _hoverView.Show();
         };
         
         aggregator.GetEvent<PageNavigatedTo>().Subscribe(arg =>
