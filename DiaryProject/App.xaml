@@ -95,13 +95,24 @@
                             </Border>
                             
                             <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger Property="IsPressed" Value="True">
                                     <Setter TargetName="OpacityBorder" Property="Background">
                                         <Setter.Value>
-                                            <SolidColorBrush Color="Black" Opacity="0.2" />
+                                            <SolidColorBrush Color="Black" Opacity="0.16" />
                                         </Setter.Value>
                                     </Setter>
                                 </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsPressed" Value="False" />
+                                        <Condition Property="IsMouseOver" Value="True" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="OpacityBorder" Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="Black" Opacity="0.1" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </MultiTrigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>

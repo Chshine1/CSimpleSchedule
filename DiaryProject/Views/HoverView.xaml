@@ -3,15 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mat="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="HoverWindow" Height="54" Width="54"
+        Title="HoverWindow" Height="60" Width="60"
         WindowStartupLocation="Manual"  ShowInTaskbar="False"
         WindowStyle="None"  WindowState="Normal"
         SnapsToDevicePixels="True" ResizeMode="NoResize"  AllowsTransparency="True"
         Background="Transparent" AllowDrop="True"
         Loaded="OnLoad" MouseLeftButtonDown="OnDrag" Closed="OnClose"
         MouseRightButtonUp="PopupOptions" DragEnter="OnDragEnter" Drop="OnDrop">
-    <Canvas Background="Transparent">
+    <Window.Effect>
+        <DropShadowEffect ShadowDepth="0" BlurRadius="3" Opacity="0.75"></DropShadowEffect>
+    </Window.Effect>
+    <Canvas Margin="3" Background="Transparent">
         <Ellipse Height="54" Width="54">
             <Ellipse.Fill>
                 <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
@@ -20,7 +26,57 @@
                 </RadialGradientBrush>
             </Ellipse.Fill>
         </Ellipse>
-        <Ellipse Height="36" Width="36" Margin="9,9" ToolTip="日记悬浮窗" ToolTipService.InitialShowDelay="500">
+        <Button Style="{StaticResource FlatButton}" Width="27" Height="54" Margin="27,0" Command="{Binding NextDay}">
+            <Button.Clip>
+                <CombinedGeometry GeometryCombineMode="Exclude">
+                    <CombinedGeometry.Geometry1>
+                        <CombinedGeometry GeometryCombineMode="Intersect">
+                            <CombinedGeometry.Geometry1>
+                                <EllipseGeometry Center="0,27" RadiusX="26" RadiusY="26" />
+                            </CombinedGeometry.Geometry1>
+                            <CombinedGeometry.Geometry2>
+                                <PathGeometry>
+                                    <PathFigure IsClosed="True" StartPoint="27,0">
+                                        <PolyLineSegment Points="27,6 0,27 27,48"></PolyLineSegment>
+                                    </PathFigure>
+                                </PathGeometry>
+                            </CombinedGeometry.Geometry2>
+                        </CombinedGeometry>
+                    </CombinedGeometry.Geometry1>
+                    <CombinedGeometry.Geometry2>
+                        <EllipseGeometry Center="0,27" RadiusX="19" RadiusY="19" />
+                    </CombinedGeometry.Geometry2>
+                </CombinedGeometry>
+            </Button.Clip>
+            <mat:PackIcon Foreground="DimGray" Width="15" Height="15" Kind="ChevronRight" Margin="15,0,0,0"></mat:PackIcon>
+        </Button>
+        <Button Style="{StaticResource FlatButton}" Width="27" Height="54" Command="{Binding PreviousDay}">
+            <Button.Clip>
+                <CombinedGeometry GeometryCombineMode="Exclude">
+                    <CombinedGeometry.Geometry1>
+                        <CombinedGeometry GeometryCombineMode="Intersect">
+                            <CombinedGeometry.Geometry1>
+                                <EllipseGeometry Center="27,27" RadiusX="26" RadiusY="26" />
+                            </CombinedGeometry.Geometry1>
+                            <CombinedGeometry.Geometry2>
+                                <PathGeometry>
+                                    <PathFigure>
+                                        <PolyLineSegment Points="0,6 27,27, 0,48"></PolyLineSegment>
+                                    </PathFigure>
+                                </PathGeometry>
+                            </CombinedGeometry.Geometry2>
+                        </CombinedGeometry>
+                    </CombinedGeometry.Geometry1>
+                    <CombinedGeometry.Geometry2>
+                        <EllipseGeometry Center="27,27" RadiusX="19" RadiusY="19" />
+                    </CombinedGeometry.Geometry2>
+                </CombinedGeometry>
+            </Button.Clip>
+            <mat:PackIcon Foreground="DimGray" Width="15" Height="15" Kind="ChevronLeft" Margin="-16,0,0,0"></mat:PackIcon>
+        </Button>
+        <Line X1="5.68749" Y1="10.4236" X2="48.3125" Y2="43.5764" Stroke="#EEEEEE" />
+        <Line X1="5.68749" Y1="43.5764" X2="48.3125" Y2="10.4236" Stroke="#EEEEEE" />
+        <Ellipse Height="36" Width="36" Margin="9,9" ToolTip="拖拽以添加日志" ToolTipService.InitialShowDelay="500">
             <Ellipse.Fill>
                 <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
                     <GradientStop Color="#91B9FF" Offset="0.75" />
@@ -28,6 +84,7 @@
                 </RadialGradientBrush>
             </Ellipse.Fill>
         </Ellipse>
-        <Image IsHitTestVisible="False" Source="../Images/Icon.png" Width="24" Height="24" Margin="15,15" />
+        <TextBlock Text="{Binding DateString}" Margin="13,16" FontSize="10" Foreground="White" />
+        <TextBlock Text="{Binding WeekdayString}" Margin="13.5,27" FontSize="9" Foreground="White" />
     </Canvas>
 </Window>
