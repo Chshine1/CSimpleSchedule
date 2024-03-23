@@ -37,6 +37,8 @@ public partial class App : PrismApplication
         containerRegistry.RegisterInstance(path + @"\CSimpleSchedule\visitor", "localFolder");
         containerRegistry.Register<IMemoService, MemoService>();
         containerRegistry.Register<IUserService, UserService>();
+        containerRegistry.GetContainer()
+            .Register<FileCopyService>(made: Parameters.Of.Type<string>(serviceKey: "localFolder"));
         
         containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>();
         containerRegistry.RegisterForNavigation<CalendarView, CalendarViewModel>();

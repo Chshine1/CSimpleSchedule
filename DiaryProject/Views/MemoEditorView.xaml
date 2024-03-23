@@ -63,6 +63,9 @@
                                                           Background="{Binding BackgroundColor}">
                                                     <StackPanel Height="210" Width="850">
                                                         <local:RichTextBoxHelper x:Name="ContentBox" Height="170"
+                                                            BorderThickness="0"
+                                                            Background="#E9E9E9"
+                                                            Padding="4,8"
                                                             Width="800" Margin="0,25,0,10"
                                                             Document="{Binding ContentDocument}">
                                                         </local:RichTextBoxHelper>

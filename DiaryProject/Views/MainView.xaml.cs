@@ -19,7 +19,7 @@ public partial class MainView : Window
 
     private const string StartUpView = nameof(LoginView);
     
-    public MainView(IEventAggregator aggregator, IRegionManager regionManager)
+    public MainView(IEventAggregator aggregator, IRegionManager regionManager, IContainerProvider container)
     {
         InitializeComponent();
         InitializeClock();
@@ -39,8 +39,9 @@ public partial class MainView : Window
         {
             MenuBar.SelectedItem = MenuBar.Items[0];
             regionManager.Regions["MainPanel"].RequestNavigate(StartUpView);
-            _hoverView = new HoverView();
+            _hoverView = container.Resolve<HoverView>();
             _hoverView.Show();
+            _hoverView.Owner = null;
         };
         
         aggregator.GetEvent<PageNavigatedTo>().Subscribe(arg =>
