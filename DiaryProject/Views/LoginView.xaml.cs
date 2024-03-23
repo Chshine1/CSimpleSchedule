@@ -24,4 +24,9 @@ public partial class LoginView : UserControl
         if (e.Key != Key.Enter) return;
         FocusHolder.Focus();
     }
+
+    private void ClearFocus(object sender, MouseButtonEventArgs e)
+    {
+        FocusHolder.Focus();
+    }
 }
