@@ -44,6 +44,7 @@ public partial class App : PrismApplication
         containerRegistry.RegisterForNavigation<CalendarView, CalendarViewModel>();
         containerRegistry.RegisterForNavigation<MemoEditorView, MemoEditorViewModel>();
         containerRegistry.RegisterForNavigation<UserView, UserViewModel>();
+        containerRegistry.RegisterForNavigation<HoverSettingsView, HoverSettingsViewModel>();
     }
 
     protected override Window CreateShell()

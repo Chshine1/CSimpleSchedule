@@ -72,6 +72,7 @@ public partial class MainView : Window
                 nameof(UserView) => MenuBar.Items[0],
                 nameof(CalendarView) => MenuBar.Items[1],
                 nameof(MemoEditorView) => MenuBar.Items[2],
+                nameof(HoverSettingsView) => MenuBar.Items[3],
                 _ => MenuBar.SelectedItem
             };
             MenuBarCommand.IsEnabled = true;

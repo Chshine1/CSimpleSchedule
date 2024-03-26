@@ -114,4 +114,10 @@ public partial class HoverView : Window
 #endif  
         _aggregator.UpdateLoadingStatus(false);
     }
+
+    private void HideHover(object sender, RoutedEventArgs e)
+    {
+        Menu.IsOpen = false;
+        Hide();
+    }
 }

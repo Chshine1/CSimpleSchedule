@@ -90,15 +90,15 @@
             <Border Width="130" Background="#F2F2F2" BorderThickness="2" BorderBrush="LightGray">
                 <StackPanel Orientation="Vertical">
                     <Button Style="{StaticResource FlatButton}" BorderThickness="0,0,0,1"
-                            BorderBrush="LightGray" Height="35" HorizontalContentAlignment="Left">
+                            BorderBrush="LightGray" Height="35" HorizontalContentAlignment="Left" Command="{Binding Show}">
                         <TextBlock Text="打开CSimpleDiary" Foreground="#333333" Margin="8,0"/>
                     </Button>
                     <Button Style="{StaticResource FlatButton}" BorderThickness="0,0,0,1"
-                            BorderBrush="LightGray" Height="35" HorizontalContentAlignment="Left">
+                            BorderBrush="LightGray" Height="35" HorizontalContentAlignment="Left" Command="{Binding ToCurrentDay}">
                         <TextBlock Text="切换到当前日期" Foreground="#333333" Margin="8,0"/>
                     </Button>
                     <Button Style="{StaticResource FlatButton}" BorderThickness="0,0,0,1"
-                            BorderBrush="LightGray" Height="35" HorizontalContentAlignment="Left">
+                            BorderBrush="LightGray" Height="35" HorizontalContentAlignment="Left" Command="{Binding OpenHoverSettings}">
                         <StackPanel Orientation="Horizontal">
                             <mat:PackIcon Kind="HelpCircleOutline" Width="15" Height="15" Foreground="#666666"
                                           VerticalAlignment="Center" Margin="6,0,3,0" />
@@ -106,11 +106,11 @@
                         </StackPanel>
                     </Button>
                     <Button Style="{StaticResource FlatButton}" BorderThickness="0,0,0,1"
-                            BorderBrush="LightGray" Height="35" HorizontalContentAlignment="Left">
+                            BorderBrush="LightGray" Height="35" HorizontalContentAlignment="Left" Click="HideHover">
                         <TextBlock Text="仅关闭悬浮球" Foreground="#333333" Margin="8,0"/>
                     </Button>
                     <Button Style="{StaticResource FlatButton}" BorderThickness="0,0,0,1"
-                            BorderBrush="LightGray" Height="32" HorizontalContentAlignment="Left">
+                            BorderBrush="LightGray" Height="32" HorizontalContentAlignment="Left" Command="{Binding Exit}">
                         <StackPanel Orientation="Horizontal">
                             <mat:PackIcon Kind="Power" Width="17" Height="17" Foreground="#E16464"
                                           VerticalAlignment="Center" Margin="5,0,2,0" />

@@ -77,9 +77,10 @@ public class MainViewModel : BindableBase
 
         MenuItemModels = new ObservableCollection<MenuItemModel>
         {
-            new() { Icon = "AccountCircle", TargetName = nameof(LoginView), IsPageEnabled = true, IsAccount = true, ToolTipText = "用户"},
-            new() { Icon = "CalendarMonth", TargetName = nameof(CalendarView), IsPageEnabled = false, IsAccount = false, ToolTipText = "日历"},
-            new() { Icon = "Notebook", TargetName = nameof(MemoEditorView), IsPageEnabled = false, IsAccount = false, ToolTipText = "编辑日程"}
+            new() { Icon = "AccountCircle", TargetName = nameof(LoginView), IsPageEnabled = true, IsAccount = true, ToolTipText = "用户" },
+            new() { Icon = "CalendarMonth", TargetName = nameof(CalendarView), IsPageEnabled = false, IsAccount = false, ToolTipText = "日历" },
+            new() { Icon = "Notebook", TargetName = nameof(MemoEditorView), IsPageEnabled = false, IsAccount = false, ToolTipText = "编辑日程" },
+            new() { Icon = "Adjust", TargetName = nameof(HoverSettingsView), IsPageEnabled = false, IsAccount = false, ToolTipText = "悬浮球设置" }
         };
         
         NavigateCommand = new DelegateCommand<MenuItemModel>(m => { regionManager1.Regions["MainPanel"].RequestNavigate(m.TargetName); });
@@ -114,12 +115,14 @@ public class MainViewModel : BindableBase
                 MenuItemModels[0].IsUserRegistered = false;
                 MenuItemModels[1].IsPageEnabled = false;
                 MenuItemModels[2].IsPageEnabled = false;
+                MenuItemModels[3].IsPageEnabled = false;
                 aggregator.GetEvent<HoverStatusChanged>().Publish(new HoverStatusModel { IsVisible = HoverStatus.Hide });
                 regionManager1.Regions["MainPanel"].RequestNavigate(nameof(LoginView));
                 return;
             }
             aggregator.GetEvent<HoverStatusChanged>().Publish(new HoverStatusModel { IsVisible = HoverStatus.Show });
             regionManager1.Regions["MainPanel"].RequestNavigate(arg == UserOperation.SuccessfullyLogin ? nameof(UserView) : nameof(CalendarView));
+            MenuItemModels[3].IsPageEnabled = true;
             if (arg == UserOperation.LocalMode) MenuItemModels[1].IsPageEnabled = true;
         });
         aggregator.GetEvent<SynchronizingEvent>().Subscribe(arg =>
