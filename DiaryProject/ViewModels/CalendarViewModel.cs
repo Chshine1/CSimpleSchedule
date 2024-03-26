@@ -101,7 +101,7 @@ public class CalendarViewModel : NavigationModel
         LocateToToday = new DelegateCommand(() => { RefreshCalendarByMonth(DateTime.Today); });
         LocateToSelected = new DelegateCommand(() => { if (_selectedMemo != null) RefreshCalendarByMonth(_selectedMemo.Date); });
         ClearSelected = new DelegateCommand(Clear);
-        SwitchHover = new DelegateCommand(() => { Aggregator.GetEvent<HoverStatusChanged>().Publish(new HoverStatusModel { IsVisible = HoverVisibility.Reverse }); });
+        SwitchHover = new DelegateCommand(() => { Aggregator.GetEvent<HoverStatusChanged>().Publish(new HoverStatusModel { IsVisible = HoverStatus.RevertVisibility }); });
         
         // 编辑器通知时调用，将选中项送到编辑器以进行编辑
         Aggregator.GetEvent<ActionNotified>().Subscribe(n =>

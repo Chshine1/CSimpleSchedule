@@ -42,7 +42,7 @@ public partial class HoverView : Window
 
     private void PopupOptions(object sender, MouseButtonEventArgs e)
     {
-        
+        Menu.IsOpen = true;
     }
 
     private void OnDragEnter(object sender, DragEventArgs e)

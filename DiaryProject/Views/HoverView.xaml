@@ -26,7 +26,7 @@
                 </RadialGradientBrush>
             </Ellipse.Fill>
         </Ellipse>
-        <Button Style="{StaticResource FlatButton}" Width="27" Height="54" Margin="27,0" Command="{Binding NextDay}">
+        <Button Style="{StaticResource FlatButton}" BorderThickness="0" Width="27" Height="54" Margin="27,0" Command="{Binding NextDay}">
             <Button.Clip>
                 <CombinedGeometry GeometryCombineMode="Exclude">
                     <CombinedGeometry.Geometry1>
@@ -50,7 +50,7 @@
             </Button.Clip>
             <mat:PackIcon Foreground="DimGray" Width="15" Height="15" Kind="ChevronRight" Margin="15,0,0,0"></mat:PackIcon>
         </Button>
-        <Button Style="{StaticResource FlatButton}" Width="27" Height="54" Command="{Binding PreviousDay}">
+        <Button Style="{StaticResource FlatButton}" BorderThickness="0" Width="27" Height="54" Command="{Binding PreviousDay}">
             <Button.Clip>
                 <CombinedGeometry GeometryCombineMode="Exclude">
                     <CombinedGeometry.Geometry1>
@@ -74,8 +74,8 @@
             </Button.Clip>
             <mat:PackIcon Foreground="DimGray" Width="15" Height="15" Kind="ChevronLeft" Margin="-16,0,0,0"></mat:PackIcon>
         </Button>
-        <Line X1="5.68749" Y1="10.4236" X2="48.3125" Y2="43.5764" Stroke="#EEEEEE" />
-        <Line X1="5.68749" Y1="43.5764" X2="48.3125" Y2="10.4236" Stroke="#EEEEEE" />
+        <Line X1="5.68749" Y1="10.4236" X2="48.3125" Y2="43.5764" Stroke="#EBEBEB" />
+        <Line X1="5.68749" Y1="43.5764" X2="48.3125" Y2="10.4236" Stroke="#EBEBEB" />
         <Ellipse Height="36" Width="36" Margin="9,9" ToolTip="拖拽以添加日志" ToolTipService.InitialShowDelay="500">
             <Ellipse.Fill>
                 <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
@@ -86,5 +86,39 @@
         </Ellipse>
         <TextBlock Text="{Binding DateString}" Margin="13,16" FontSize="10" Foreground="White" />
         <TextBlock Text="{Binding WeekdayString}" Margin="13.5,27" FontSize="9" Foreground="White" />
+        <Popup x:Name="Menu" StaysOpen="False" Placement="MousePoint">
+            <Border Width="130" Background="#F2F2F2" BorderThickness="2" BorderBrush="LightGray">
+                <StackPanel Orientation="Vertical">
+                    <Button Style="{StaticResource FlatButton}" BorderThickness="0,0,0,1"
+                            BorderBrush="LightGray" Height="35" HorizontalContentAlignment="Left">
+                        <TextBlock Text="打开CSimpleDiary" Foreground="#333333" Margin="8,0"/>
+                    </Button>
+                    <Button Style="{StaticResource FlatButton}" BorderThickness="0,0,0,1"
+                            BorderBrush="LightGray" Height="35" HorizontalContentAlignment="Left">
+                        <TextBlock Text="切换到当前日期" Foreground="#333333" Margin="8,0"/>
+                    </Button>
+                    <Button Style="{StaticResource FlatButton}" BorderThickness="0,0,0,1"
+                            BorderBrush="LightGray" Height="35" HorizontalContentAlignment="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <mat:PackIcon Kind="HelpCircleOutline" Width="15" Height="15" Foreground="#666666"
+                                          VerticalAlignment="Center" Margin="6,0,3,0" />
+                            <TextBlock Text="悬浮球界面/帮助" Foreground="#333333"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource FlatButton}" BorderThickness="0,0,0,1"
+                            BorderBrush="LightGray" Height="35" HorizontalContentAlignment="Left">
+                        <TextBlock Text="仅关闭悬浮球" Foreground="#333333" Margin="8,0"/>
+                    </Button>
+                    <Button Style="{StaticResource FlatButton}" BorderThickness="0,0,0,1"
+                            BorderBrush="LightGray" Height="32" HorizontalContentAlignment="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <mat:PackIcon Kind="Power" Width="17" Height="17" Foreground="#E16464"
+                                          VerticalAlignment="Center" Margin="5,0,2,0" />
+                            <TextBlock Text="退出程序" Foreground="#E16464"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </Popup>
     </Canvas>
 </Window>

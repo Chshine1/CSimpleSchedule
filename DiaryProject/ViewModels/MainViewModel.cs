@@ -114,9 +114,11 @@ public class MainViewModel : BindableBase
                 MenuItemModels[0].IsUserRegistered = false;
                 MenuItemModels[1].IsPageEnabled = false;
                 MenuItemModels[2].IsPageEnabled = false;
+                aggregator.GetEvent<HoverStatusChanged>().Publish(new HoverStatusModel { IsVisible = HoverStatus.Hide });
                 regionManager1.Regions["MainPanel"].RequestNavigate(nameof(LoginView));
                 return;
             }
+            aggregator.GetEvent<HoverStatusChanged>().Publish(new HoverStatusModel { IsVisible = HoverStatus.Show });
             regionManager1.Regions["MainPanel"].RequestNavigate(arg == UserOperation.SuccessfullyLogin ? nameof(UserView) : nameof(CalendarView));
             if (arg == UserOperation.LocalMode) MenuItemModels[1].IsPageEnabled = true;
         });

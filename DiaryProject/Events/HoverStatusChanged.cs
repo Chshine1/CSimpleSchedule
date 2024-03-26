@@ -1,15 +1,15 @@
 namespace DiaryProject.Events;
 
-public enum HoverVisibility
+public enum HoverStatus
 {
-    Reverse,
-    Visible,
-    Hidden
+    RevertVisibility,
+    Show,
+    Hide
 }
 
 public class HoverStatusModel
 {
-    public HoverVisibility IsVisible { get; init; }
+    public HoverStatus IsVisible { get; init; }
 }
 
 public class HoverStatusChanged : PubSubEvent<HoverStatusModel>;

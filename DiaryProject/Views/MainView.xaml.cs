@@ -40,7 +40,7 @@ public partial class MainView : Window
             MenuBar.SelectedItem = MenuBar.Items[0];
             regionManager.Regions["MainPanel"].RequestNavigate(StartUpView);
             _hoverView = container.Resolve<HoverView>();
-            _hoverView.Show();
+            _hoverView.Hide();
             _hoverView.Owner = null;
         };
 
@@ -48,14 +48,14 @@ public partial class MainView : Window
         {
             switch (arg.IsVisible)
             {
-                case HoverVisibility.Reverse:
+                case HoverStatus.RevertVisibility:
                     if (_hoverView.IsVisible) _hoverView.Hide();
                     else _hoverView.Show();
                     break;
-                case HoverVisibility.Visible:
+                case HoverStatus.Show:
                     _hoverView.Show();
                     break;
-                case HoverVisibility.Hidden:
+                case HoverStatus.Hide:
                     _hoverView.Hide();
                     break;
                 default:

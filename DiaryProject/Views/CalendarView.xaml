@@ -22,13 +22,13 @@
 
                     <DockPanel VerticalAlignment="Center" LastChildFill="True">
                         <Button DockPanel.Dock="Left" Height="50" Style="{StaticResource FlatButton}"
-                                Background="Transparent" Foreground="Black"
+                                Background="Transparent" Foreground="Black" BorderThickness="0"
                                 Command="{Binding LastPage}">
                             <mat:PackIcon Kind="ChevronLeft" Width="40" Height="40" Foreground="DimGray">
                             </mat:PackIcon>
                         </Button>
                         <Button DockPanel.Dock="Right" Height="50" Style="{StaticResource FlatButton}"
-                                Background="Transparent" Foreground="Black"
+                                Background="Transparent" Foreground="Black" BorderThickness="0"
                                 Command="{Binding NextPage}">
                             <mat:PackIcon Kind="ChevronRight" Width="40" Height="40" Foreground="DimGray">
                             </mat:PackIcon>

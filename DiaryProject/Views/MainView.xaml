@@ -37,21 +37,21 @@
                 </DockPanel.Effect>-->
 
                     <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                        <Button x:Name="MinimizeButton"
+                        <Button x:Name="MinimizeButton" BorderThickness="0"
                                 Height="40"
                                 Width="50"
                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
                                 Style="{StaticResource FlatButton}">
                             <mat:PackIcon Kind="WindowMinimize" />
                         </Button>
-                        <Button x:Name="MaximizeButton"
+                        <Button x:Name="MaximizeButton" BorderThickness="0"
                                 Height="40"
                                 Width="50"
                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
                                 Style="{StaticResource FlatButton}">
                             <mat:PackIcon x:Name="MaximizeIcon" Kind="WindowMaximize" />
                         </Button>
-                        <Button x:Name="CloseButton"
+                        <Button x:Name="CloseButton" BorderThickness="0"
                                 Height="40"
                                 Width="50"
                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"
@@ -275,13 +275,13 @@
 
                                     <DockPanel Height="24" Background="{StaticResource Blue1}">
                                         <Button DockPanel.Dock="Left" Margin="0" Width="18" Height="24"
-                                                VerticalAlignment="Center"
+                                                VerticalAlignment="Center" BorderThickness="0"
                                                 Style="{StaticResource FlatButton}"
                                                 Command="{Binding CalendarLast}">
                                             <mat:PackIcon Kind="ChevronLeft" />
                                         </Button>
                                         <Button DockPanel.Dock="Right" Margin="0" Width="18" Height="24"
-                                                VerticalAlignment="Center"
+                                                VerticalAlignment="Center" BorderThickness="0"
                                                 Style="{StaticResource FlatButton}"
                                                 Command="{Binding CalendarNext}">
                                             <mat:PackIcon Kind="ChevronRight" />
