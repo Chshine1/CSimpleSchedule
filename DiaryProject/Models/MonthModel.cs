@@ -15,4 +15,6 @@ public class MonthModel(DateTime dateTime) : BindableBase
     public DateTime NextMonth() => dateTime.AddMonths(1);
     
     public DateTime LastMonth() => dateTime.AddMonths(-1);
+
+    public DateTime Current() => dateTime;
 }

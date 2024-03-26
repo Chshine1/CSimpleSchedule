@@ -43,6 +43,25 @@ public partial class MainView : Window
             _hoverView.Show();
             _hoverView.Owner = null;
         };
+
+        aggregator.GetEvent<HoverStatusChanged>().Subscribe(arg =>
+        {
+            switch (arg.IsVisible)
+            {
+                case HoverVisibility.Reverse:
+                    if (_hoverView.IsVisible) _hoverView.Hide();
+                    else _hoverView.Show();
+                    break;
+                case HoverVisibility.Visible:
+                    _hoverView.Show();
+                    break;
+                case HoverVisibility.Hidden:
+                    _hoverView.Hide();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(arg));
+            }
+        });
         
         aggregator.GetEvent<PageNavigatedTo>().Subscribe(arg =>
         {

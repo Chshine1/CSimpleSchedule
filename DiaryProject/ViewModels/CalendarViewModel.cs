@@ -75,12 +75,14 @@ public class CalendarViewModel : NavigationModel
     }
     
     public DelegateCommand<ListBox> SelectCommand { get; private set; }
+    public DelegateCommand Refresh { get; private set; }
     public DelegateCommand NextPage { get; private set; }
     public DelegateCommand LastPage { get; private set; }
     public DelegateCommand ExpandEditor { get; private set; }
     public DelegateCommand LocateToToday { get; private set; }
     public DelegateCommand LocateToSelected { get; private set; }
     public DelegateCommand ClearSelected { get; private set; }
+    public DelegateCommand SwitchHover { get; private set; }
 
     #endregion
 
@@ -92,12 +94,14 @@ public class CalendarViewModel : NavigationModel
         _timerService = timerService;
         
         SelectCommand = new DelegateCommand<ListBox>(m => { _listBox = m; });
+        Refresh = new DelegateCommand(() => { RefreshCalendarByMonth(CurrentPage.Current());});
         NextPage = new DelegateCommand(() => { RefreshCalendarByMonth(CurrentPage.NextMonth()); });
         LastPage = new DelegateCommand(() => { RefreshCalendarByMonth(CurrentPage.LastMonth()); });
         ExpandEditor = new DelegateCommand(() => { regionManager.Regions["MainPanel"].RequestNavigate("MemoEditorView"); });
         LocateToToday = new DelegateCommand(() => { RefreshCalendarByMonth(DateTime.Today); });
         LocateToSelected = new DelegateCommand(() => { if (_selectedMemo != null) RefreshCalendarByMonth(_selectedMemo.Date); });
         ClearSelected = new DelegateCommand(Clear);
+        SwitchHover = new DelegateCommand(() => { Aggregator.GetEvent<HoverStatusChanged>().Publish(new HoverStatusModel { IsVisible = HoverVisibility.Reverse }); });
         
         // 编辑器通知时调用，将选中项送到编辑器以进行编辑
         Aggregator.GetEvent<ActionNotified>().Subscribe(n =>
