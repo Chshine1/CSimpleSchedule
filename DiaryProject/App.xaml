@@ -479,6 +479,44 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            
+            <Style x:Key="ToggleSwitch" TargetType="ToggleButton">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Canvas Height="24" Width="52" Margin="{TemplateBinding Margin}" VerticalAlignment="{TemplateBinding VerticalAlignment}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
+                                <Rectangle x:Name="BackRect" Fill="{TemplateBinding Background}" Width="48" Height="20" 
+                                           RadiusX="10" RadiusY="10" StrokeThickness="0" Margin="2"/>
+                                <Ellipse x:Name="Switch" Width="24" Height="24" Margin="0" Fill="{TemplateBinding Foreground}">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect ShadowDepth="0" Opacity="0.32" BlurRadius="5" />
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                            </Canvas>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter TargetName="BackRect" Property="Fill" Value="#BBBBBB" />
+                                    <Setter TargetName="Switch" Property="Fill" Value="{StaticResource White1}" />
+                                </Trigger>
+                                <EventTrigger RoutedEvent="Checked">
+                                    <BeginStoryboard>
+                                        <Storyboard TargetName="Switch" TargetProperty="Margin">
+                                            <ThicknessAnimation From="0" To="28,0" Duration="0:0:0.1" AutoReverse="False" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="Unchecked">
+                                    <BeginStoryboard>
+                                        <Storyboard TargetName="Switch" TargetProperty="Margin">
+                                            <ThicknessAnimation From="28,0" To="0" Duration="0:0:0.1" AutoReverse="False" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </prism:PrismApplication>

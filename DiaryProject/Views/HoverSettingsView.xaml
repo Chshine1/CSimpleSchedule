@@ -100,6 +100,41 @@
                 <DropShadowEffect ShadowDepth="1" Opacity="0.2" />
             </Rectangle.Effect>
         </Rectangle>
-        <StackPanel Width="500"></StackPanel>
+        <!--<Border Width="420" Height="645" Margin="0,8,0,0" CornerRadius="16"
+                Background="{StaticResource White2}">
+            <Border.Effect>
+                <DropShadowEffect Opacity="0.42" ShadowDepth="4"></DropShadowEffect>
+            </Border.Effect>
+        </Border>-->
+        <StackPanel Width="440" Height="645" Margin="0,8,0,0">
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <Line X1="0" X2="200" Y1="0" Y2="0" Stroke="Gray" StrokeThickness="2" />
+                <Ellipse Width="8" Height="8" Fill="Gray" Margin="16,-4" />
+                <Line X1="0" X2="200" Y1="0" Y2="0" Stroke="Gray" StrokeThickness="2" />
+            </StackPanel>
+            <mat:PackIcon Kind="Settings" Width="64" Height="64" HorizontalAlignment="Center" Foreground="DimGray" Margin="0,12,0,0" />
+            <TextBlock Text="悬浮球设置" Foreground="DimGray" FontSize="18" Margin="0,4" HorizontalAlignment="Center" />
+            <!--<StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,10">
+                <Line X1="0" X2="160" Y1="0" Y2="0" Stroke="Gray" StrokeThickness="2" />
+                <Ellipse Width="4" Height="4" Fill="Gray" Margin="10,-2" />
+                <Line X1="0" X2="160" Y1="0" Y2="0" Stroke="Gray" StrokeThickness="2" />
+            </StackPanel>-->
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,10">
+                <Line X1="0" X2="200" Y1="0" Y2="0" Stroke="Gray" StrokeThickness="2" />
+                <Ellipse Width="8" Height="8" Fill="Gray" Margin="16,-4" />
+                <Line X1="0" X2="200" Y1="0" Y2="0" Stroke="Gray" StrokeThickness="2" />
+            </StackPanel>
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="打开悬浮球" FontWeight="Bold" FontSize="14" Foreground="#4A4A4A" VerticalAlignment="Center" />
+                    <TextBlock Text="(*您也可以在悬浮球的下拉菜单和日历界面中进行切换)" FontSize="8" />
+                </StackPanel>
+                <ToggleButton Margin="12,0" VerticalAlignment="Center" IsChecked="False" Style="{StaticResource ToggleSwitch}" Background="{StaticResource Blue2}" Foreground="{StaticResource Blue1}" />
+            </StackPanel>
+            <StackPanel Margin="10,20,10,10" Orientation="Horizontal">
+                <TextBlock Text="登录后自动打开悬浮球" FontSize="14" Foreground="#4A4A4A" VerticalAlignment="Center" />
+                <ToggleButton Margin="6,0" VerticalAlignment="Center" IsChecked="False" Style="{StaticResource ToggleSwitch}" Background="{StaticResource Blue2}" Foreground="{StaticResource Blue1}" />
+            </StackPanel>
+        </StackPanel>
     </DockPanel>
 </UserControl>
