@@ -21,6 +21,8 @@ public partial class App : PrismApplication
 
     public static string? UserToken { get; set; }
 
+    public static bool IsHoverVisible { get; set; }
+
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
         containerRegistry.GetContainer()

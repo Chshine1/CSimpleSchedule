@@ -49,7 +49,7 @@
                             <StackPanel Margin="20,0,0,0">
                                 <DockPanel HorizontalAlignment="Center">
                                     <Border HorizontalAlignment="Left" DockPanel.Dock="Left"
-                                            Width="855" MaxHeight="300" CornerRadius="4" Margin="0,12"
+                                            Width="855" CornerRadius="4" Margin="0,12"
                                             Background="{Binding BackgroundColor}"
                                             BorderThickness="2" BorderBrush="{Binding HeaderColor}"
                                             x:Name="MemoPresenter">
@@ -57,31 +57,18 @@
                                             <DropShadowEffect Opacity="0.3" />
                                         </Border.Effect>
                                         <DockPanel LastChildFill="True">
-                                            <DockPanel DockPanel.Dock="Top" MaxHeight="300">
+                                            <DockPanel DockPanel.Dock="Top">
                                                 <Expander DockPanel.Dock="Bottom"
                                                           Style="{StaticResource MemoEditorExpander}"
                                                           Background="{Binding BackgroundColor}">
-                                                    <StackPanel Height="210" Width="850">
-                                                        <local:RichTextBoxHelper x:Name="ContentBox" Height="170"
+                                                    <StackPanel Height="510" Width="850">
+                                                        <local:RichTextBoxHelper x:Name="ContentBox" Height="470"
                                                             BorderThickness="0"
                                                             Background="#E9E9E9"
                                                             Padding="4,8"
                                                             Width="800" Margin="0,25,0,10"
                                                             Document="{Binding ContentDocument}">
                                                         </local:RichTextBoxHelper>
-                                                        <!--<StackPanel Orientation="Horizontal"
-                                                                    HorizontalAlignment="Right"
-                                                                    Margin="20,0">
-                                                            <Button Width="80" Height="20" Margin="10,0"
-                                                                    Command="{Binding ElementName=This, Path=DataContext.ConfirmContentInput}"
-                                                                    CommandParameter="{Binding ElementName=ContentBox}">
-                                                                <TextBlock Text="Confirm" />
-                                                            </Button>
-                                                            <Button Width="80" Height="20" Margin="10,0"
-                                                                    HorizontalAlignment="Right">
-                                                                <TextBlock Text="Cancel" />
-                                                            </Button>
-                                                        </StackPanel>-->
                                                     </StackPanel>
                                                 </Expander>
                                                 <StackPanel DockPanel.Dock="Left" Margin="10,4"

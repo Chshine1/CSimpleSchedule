@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Forms.VisualStyles;
 using DiaryProject.Shared.Utils;
 using DiaryProject.Views;
 using Application = System.Windows.Application;
@@ -11,6 +12,7 @@ public class HoverViewModel : BindableBase
     
     public string DateString => _targetTime.ToString("MM/dd");
     public string WeekdayString => _targetTime.GetChineseDayOfWeek();
+    public string DayOffset => (new TimeSpan(_targetTime.Ticks - DateTime.Today.Ticks).TotalDays).ToString("+#;-#;0");
 
     public DelegateCommand NextDay { get; init; }
     public DelegateCommand PreviousDay { get; init; }
@@ -27,12 +29,14 @@ public class HoverViewModel : BindableBase
             _targetTime = _targetTime.AddDays(1);
             RaisePropertyChanged(nameof(DateString));
             RaisePropertyChanged(nameof(WeekdayString));
+            RaisePropertyChanged(nameof(DayOffset));
         });
         PreviousDay = new DelegateCommand(() =>
         {
             _targetTime = _targetTime.AddDays(-1);
             RaisePropertyChanged(nameof(DateString));
             RaisePropertyChanged(nameof(WeekdayString));
+            RaisePropertyChanged(nameof(DayOffset));
         });
         Show = new DelegateCommand(() =>
         {
@@ -44,6 +48,7 @@ public class HoverViewModel : BindableBase
             _targetTime = DateTime.Now;
             RaisePropertyChanged(nameof(DateString));
             RaisePropertyChanged(nameof(WeekdayString));
+            RaisePropertyChanged(nameof(DayOffset));
         });
         OpenHoverSettings = new DelegateCommand(() =>
         {

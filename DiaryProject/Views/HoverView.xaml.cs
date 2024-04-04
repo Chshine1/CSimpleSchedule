@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Input;
+using DiaryProject.Events;
 using DiaryProject.Service.Local;
 using DiaryProject.Service.Web;
 using DiaryProject.Shared.Dtos;
@@ -117,6 +118,8 @@ public partial class HoverView : Window
 
     private void HideHover(object sender, RoutedEventArgs e)
     {
+        App.IsHoverVisible = false;
+        _aggregator.GetEvent<HoverStatusChanged>().Publish(new HoverStatusModel { IsVisible = HoverStatus.Hide });
         Menu.IsOpen = false;
         Hide();
     }

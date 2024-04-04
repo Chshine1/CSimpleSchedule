@@ -116,10 +116,13 @@ public class MainViewModel : BindableBase
                 MenuItemModels[1].IsPageEnabled = false;
                 MenuItemModels[2].IsPageEnabled = false;
                 MenuItemModels[3].IsPageEnabled = false;
+                App.IsHoverVisible = false;
                 aggregator.GetEvent<HoverStatusChanged>().Publish(new HoverStatusModel { IsVisible = HoverStatus.Hide });
                 regionManager1.Regions["MainPanel"].RequestNavigate(nameof(LoginView));
                 return;
             }
+
+            App.IsHoverVisible = true;
             aggregator.GetEvent<HoverStatusChanged>().Publish(new HoverStatusModel { IsVisible = HoverStatus.Show });
             regionManager1.Regions["MainPanel"].RequestNavigate(arg == UserOperation.SuccessfullyLogin ? nameof(UserView) : nameof(CalendarView));
             MenuItemModels[3].IsPageEnabled = true;
