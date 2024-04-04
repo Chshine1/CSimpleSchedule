@@ -61,8 +61,8 @@
                                                 <Expander DockPanel.Dock="Bottom"
                                                           Style="{StaticResource MemoEditorExpander}"
                                                           Background="{Binding BackgroundColor}">
-                                                    <StackPanel Height="510" Width="850">
-                                                        <local:RichTextBoxHelper x:Name="ContentBox" Height="470"
+                                                    <StackPanel MinHeight="210" Width="850">
+                                                        <local:RichTextBoxHelper x:Name="ContentBox" MinHeight="170"
                                                             BorderThickness="0"
                                                             Background="#E9E9E9"
                                                             Padding="4,8"
@@ -196,7 +196,7 @@
                                                         </TextBox>
                                                     </StackPanel>
                                                 </StackPanel>
-                                                <Rectangle Width="4" Height="64" Fill="{StaticResource White4}"
+                                                <Rectangle Width="3" Height="64" Margin="0,2,0,0" Fill="{StaticResource White4}"
                                                            DockPanel.Dock="Right" HorizontalAlignment="Right" />
                                                 <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
                                                     <ComboBox Style="{StaticResource MemoCategoryComboBox}"
