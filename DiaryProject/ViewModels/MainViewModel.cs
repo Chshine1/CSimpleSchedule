@@ -66,7 +66,7 @@ public class MainViewModel : BindableBase
 
     #endregion
 
-    public MainViewModel(IRegionManager regionManager, IEventAggregator aggregator, IMemoLocalRepository memoRepository)
+    public MainViewModel(FileCopyService fileService, IRegionManager regionManager, IEventAggregator aggregator, IMemoLocalRepository memoRepository)
     {
         var regionManager1 = regionManager;
         _memoRepository = memoRepository;
@@ -122,8 +122,9 @@ public class MainViewModel : BindableBase
                 return;
             }
 
-            App.IsHoverVisible = true;
-            aggregator.GetEvent<HoverStatusChanged>().Publish(new HoverStatusModel { IsVisible = HoverStatus.Show });
+            var showHover = fileService.ReadHoverConfiguration().ShowOnRegistered;
+            App.IsHoverVisible = showHover;
+            if (showHover) aggregator.GetEvent<HoverStatusChanged>().Publish(new HoverStatusModel { IsVisible = HoverStatus.Show });
             regionManager1.Regions["MainPanel"].RequestNavigate(arg == UserOperation.SuccessfullyLogin ? nameof(UserView) : nameof(CalendarView));
             MenuItemModels[3].IsPageEnabled = true;
             if (arg == UserOperation.LocalMode) MenuItemModels[1].IsPageEnabled = true;

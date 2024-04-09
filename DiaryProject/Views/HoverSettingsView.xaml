@@ -134,11 +134,11 @@
             </DockPanel>
             <DockPanel Margin="10,25,10,15">
                 <TextBlock DockPanel.Dock="Left" Text="登录后自动打开悬浮球" FontSize="14" Foreground="#4A4A4A" VerticalAlignment="Center" />
-                <ToggleButton DockPanel.Dock="Right" VerticalAlignment="Center" HorizontalAlignment="Right" IsChecked="False" Style="{StaticResource ToggleSwitch}" Background="{StaticResource Blue2}" Foreground="{StaticResource Blue1}" />
+                <ToggleButton DockPanel.Dock="Right" VerticalAlignment="Center" HorizontalAlignment="Right" IsChecked="{Binding ShowOnRegistered}" Style="{StaticResource ToggleSwitch}" Background="{StaticResource Blue2}" Foreground="{StaticResource Blue1}" />
             </DockPanel>
             <DockPanel Margin="10,15">
                 <TextBlock DockPanel.Dock="Left" Text="添加日志时自动激活" FontSize="14" Foreground="#4A4A4A" VerticalAlignment="Center" />
-                <ToggleButton DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="False" Style="{StaticResource ToggleSwitch}" Background="{StaticResource Blue2}" Foreground="{StaticResource Blue1}" />
+                <ToggleButton DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding SetActiveOnAdded}" Style="{StaticResource ToggleSwitch}" Background="{StaticResource Blue2}" Foreground="{StaticResource Blue1}" />
             </DockPanel>
             <DockPanel Margin="10,15">
                 <TextBlock DockPanel.Dock="Left" Text="日志自动分类" FontSize="14" Foreground="#4A4A4A" VerticalAlignment="Center" />
