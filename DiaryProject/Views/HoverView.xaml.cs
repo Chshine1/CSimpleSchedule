@@ -11,13 +11,14 @@ namespace DiaryProject.Views;
 
 public partial class HoverView : Window
 {
-    // private readonly FileCopyService _fileCopyService;
+    private readonly FileCopyService _fileService;
     private readonly IEventAggregator _aggregator;
     private readonly IMemoService _memoService;
     private readonly IMemoLocalRepository _memoRepository;
 
-    public HoverView(IEventAggregator aggregator, IMemoService memoService, IMemoLocalRepository memoRepository)
+    public HoverView(FileCopyService fileService, IEventAggregator aggregator, IMemoService memoService, IMemoLocalRepository memoRepository)
     {
+        _fileService = fileService;
         _aggregator = aggregator;
         _memoService = memoService;
         _memoRepository = memoRepository;
@@ -63,19 +64,6 @@ public partial class HoverView : Window
         {
             Console.WriteLine(exception);
         }
-        /*try
-        {
-            var data = e.Data.GetData(DataFormats.FileDrop);
-            var fileName = ((Array)data).GetValue(0).ToString();
-            _fileCopyService.CopyFile(fileName);
-            var b = Path.Exists(fileName);
-            //TODO:Shortcut
-            Console.WriteLine(b);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-        }*/
     }
     
     private async void AddMemo(string content)
@@ -99,8 +87,8 @@ public partial class HoverView : Window
         var memoDto = new MemoDto
         {
             Id = 0,
-            Active = false,
-            Category = 1,
+            Active = _fileService.ReadHoverConfiguration().SetActiveOnAdded,
+            Category = _fileService.ReadHoverConfiguration().DefaultMemoCategory + 1,
             Title = content[..5],
             Content = content,
             StartTime = t,
