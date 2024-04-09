@@ -142,8 +142,59 @@
             </DockPanel>
             <DockPanel Margin="10,15">
                 <TextBlock DockPanel.Dock="Left" Text="日志自动分类" FontSize="14" Foreground="#4A4A4A" VerticalAlignment="Center" />
-                <ListBox DockPanel.Dock="Right" HorizontalAlignment="Right" Style="{StaticResource ToggleListBox}">
-                </ListBox>
+                <ComboBox Style="{StaticResource MemoCategoryComboBox}"
+                          Background="{StaticResource White3}"
+                          HorizontalAlignment="Right" VerticalAlignment="Center"
+                          SelectedIndex="{Binding CategoryIndex, Mode=TwoWay}">
+                    <ComboBox.Effect>
+                        <DropShadowEffect Opacity="0.15" ShadowDepth="0" />
+                    </ComboBox.Effect>
+                    <ComboBoxItem>
+                        <TextBlock Margin="-3,0" Text="---未分类---" FontSize="10"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" Foreground="#555555" />
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="9" Height="9"
+                                     VerticalAlignment="Center" Fill="#91B9ff"
+                                     Margin="6,0" />
+                            <TextBlock Margin="4,-2,0,0" Text="日记" FontSize="12"
+                                       VerticalAlignment="Center"
+                                       Foreground="#444444" />
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="9" Height="9"
+                                     VerticalAlignment="Center" Fill="#E16464"
+                                     Margin="6,0" />
+                            <TextBlock Margin="4,-2,0,0" Text="提醒" FontSize="12"
+                                       VerticalAlignment="Center"
+                                       Foreground="#444444" />
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="9" Height="9"
+                                     VerticalAlignment="Center" Fill="#E1D77A"
+                                     Margin="6,0" />
+                            <TextBlock Margin="4,-2,0,0" Text="闹钟" FontSize="12"
+                                       VerticalAlignment="Center"
+                                       Foreground="#444444" />
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="9" Height="9"
+                                     VerticalAlignment="Center" Fill="#7BD672"
+                                     Margin="6,0" />
+                            <TextBlock Margin="4,-2,0,0" Text="备忘录" FontSize="12"
+                                       VerticalAlignment="Center"
+                                       Foreground="#444444" />
+                        </StackPanel>
+                    </ComboBoxItem>
+                </ComboBox>
             </DockPanel>
         </StackPanel>
     </DockPanel>

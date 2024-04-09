@@ -200,7 +200,7 @@
                                                            DockPanel.Dock="Right" HorizontalAlignment="Right" />
                                                 <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
                                                     <ComboBox Style="{StaticResource MemoCategoryComboBox}"
-                                                              Background="{StaticResource White3}"
+                                                              Background="{StaticResource White2}"
                                                               HorizontalAlignment="Right" VerticalAlignment="Center"
                                                               Margin="8,0"
                                                               SelectedIndex="{Binding CategoryIndex, Mode=TwoWay}">

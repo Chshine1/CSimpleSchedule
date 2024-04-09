@@ -6,9 +6,13 @@ namespace DiaryProject.ViewModels;
 
 public class HoverSettingsViewModel : NavigationModel
 {
-    private FileCopyService _fileService;
+    private static readonly string[] CategoryTexts = ["-不分类-", " 日记", " 提醒", " 闹钟", " 备忘录"];
+
+    private readonly FileCopyService _fileService;
     
-    private HoverConfiguration _configuration;
+    private readonly HoverConfiguration _configuration;
+    
+    public string CategoryText => CategoryTexts[CategoryIndex];
     
     public bool HoverVisible
     {
@@ -41,6 +45,17 @@ public class HoverSettingsViewModel : NavigationModel
         }
     }
 
+    public int CategoryIndex
+    {
+        get => _configuration.DefaultMemoCategory;
+        set
+        {
+            _configuration.DefaultMemoCategory = value;
+            _fileService.WriteHoverConfiguration(_configuration);
+            RaisePropertyChanged(nameof(CategoryText));
+        }
+    }
+
     public HoverSettingsViewModel(IEventAggregator aggregator, FileCopyService fileService) : base(aggregator)
     {
         _fileService = fileService;
@@ -51,7 +66,5 @@ public class HoverSettingsViewModel : NavigationModel
         });
         
         _configuration = _fileService.ReadHoverConfiguration();
-        ShowOnRegistered = _configuration.ShowOnRegistered;
-        SetActiveOnAdded = _configuration.SetActiveOnAdded;
     }
 }

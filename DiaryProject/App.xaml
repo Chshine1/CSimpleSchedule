@@ -296,7 +296,7 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="ComboBox">
                             <StackPanel>
-                                <ToggleButton BorderThickness="0" Background="Transparent"
+                                <ToggleButton BorderThickness="0" Background="{TemplateBinding Background}"
                                               IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsDropDownOpen, Mode=TwoWay}">
                                     <ToggleButton.Style>
                                         <Style TargetType="ToggleButton">
