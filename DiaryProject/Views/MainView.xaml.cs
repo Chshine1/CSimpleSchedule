@@ -32,7 +32,6 @@ public partial class MainView : Window
         };
         CloseButton.Click += (_, _) =>
         {
-            _hoverView.Close();
             Close();
         };
         Loaded += (_, _) =>
@@ -43,7 +42,10 @@ public partial class MainView : Window
             _hoverView.Hide();
             _hoverView.Owner = null;
         };
-
+        Closed += (_, _) =>
+        {
+            _hoverView.Close();
+        };
         aggregator.GetEvent<HoverStatusChanged>().Subscribe(arg =>
         {
             switch (arg.IsVisible)
