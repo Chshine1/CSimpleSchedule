@@ -62,12 +62,18 @@
                                                           Style="{StaticResource MemoEditorExpander}"
                                                           Background="{Binding BackgroundColor}">
                                                     <StackPanel MinHeight="210" Width="850">
-                                                        <local:RichTextBoxHelper x:Name="ContentBox" MinHeight="170"
+                                                        <local:RichTextBoxHelper MinHeight="170"
                                                             BorderThickness="0"
                                                             Background="#E9E9E9"
                                                             Padding="4,8"
                                                             Width="800" Margin="0,25,0,10"
                                                             Document="{Binding ContentDocument}">
+                                                            <i:Interaction.Triggers>
+                                                                <i:EventTrigger EventName="LostFocus">
+                                                                    <i:InvokeCommandAction Command="{Binding ElementName=This, Path=DataContext.ConfirmContentInput}"
+                                                                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:RichTextBoxHelper}}" />
+                                                                </i:EventTrigger>
+                                                            </i:Interaction.Triggers>
                                                         </local:RichTextBoxHelper>
                                                     </StackPanel>
                                                 </Expander>
