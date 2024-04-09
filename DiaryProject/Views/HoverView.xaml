@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mat="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         Title="HoverWindow" Height="60" Width="60"
@@ -13,11 +14,16 @@
         SnapsToDevicePixels="True" ResizeMode="NoResize"  AllowsTransparency="True"
         Background="Transparent" AllowDrop="True"
         Loaded="OnLoad" MouseLeftButtonDown="OnDrag" Closed="OnClose"
-        MouseRightButtonUp="PopupOptions" DragEnter="OnDragEnter" Drop="OnDrop">
+        MouseRightButtonUp="PopupOptions">
     <Window.Effect>
         <DropShadowEffect ShadowDepth="0" BlurRadius="3" Opacity="0.75"></DropShadowEffect>
     </Window.Effect>
     <Grid>
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Drop">
+                <i:InvokeCommandAction Command="{Binding Drop}" PassEventArgsToCommand="True"></i:InvokeCommandAction>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
         <Canvas Margin="3" Background="Transparent">
             <Ellipse Height="54" Width="54">
                 <Ellipse.Fill>
